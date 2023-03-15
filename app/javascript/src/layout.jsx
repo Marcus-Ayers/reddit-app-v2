@@ -1,49 +1,49 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './layout.scss';
 import { safeCredentials, handleErrors } from '@utils/fetchHelper';
-import Dropdown from 'react-bootstrap/Dropdown';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-class Layout extends Component {
-  state = {
+
+
+const Layout = (props) => {
+  const [state, setState] = useState({
     isOpen: false,
     authenticated: false,
     username: [],
     show_login: true,
-  }
-  
-  componentDidMount() {
+  });
+
+  useEffect(() => {
     fetch('/api/authenticated')
       .then(handleErrors)
       .then(data => {
-        console.log(data)
-        this.setState({
+        console.log(data);
+        setState({
+          ...state,
           username: data.username,
           authenticated: data.authenticated,
-        })
+        });
       })
       .catch(error => {
         console.error("Not Logged in " + error);
       });
-  }
+  }, []);
 
-  toggleDropdown = () => {
-    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
-    if (!this.state.isOpen) { // PUTS THE CURSOR IN THE TITLE FIELD
+  const toggleDropdown = () => {
+    setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
+    if (!state.isOpen) {
       setTimeout(() => {
         document.getElementById('title');
       }, 0);
     }
   };
 
-  toggle = () => {
-    this.setState({
-      show_login: !this.state.show_login,
-    })
-  }
-  handleLogout = () => {
+  const toggle = () => {
+    setState({
+      ...state,
+      show_login: !state.show_login,
+    });
+  };
+
+  const handleLogout = () => {
     // Send a DELETE request to the '/sessions' endpoint to log the user out
     fetch('/sessions', {
       method: 'DELETE',
@@ -63,7 +63,7 @@ class Layout extends Component {
     });
   };
 
-  handleSignOut = () => {
+  const handleSignOut = () => {
     // Send a DELETE request to the '/api/sessions' endpoint with CSRF token to log the user out
     fetch('/api/sessions', {
       method: 'DELETE',
@@ -80,34 +80,30 @@ class Layout extends Component {
     });
   }
 
-  render() {
-    const { authenticated, username, isOpen } = this.state;
-  
-    // Define the logout button
-    const logoutButton = (
-      <div className="container">
+  const { authenticated, username, isOpen } = state;
 
-      <form action="/api/sessions" method="post">
-        <div className="navbar-layout">
-        <h4 className='navbar-username' onClick={this.toggleDropdown}>{username}</h4>
-        {isOpen && (
-          <div className="dropdown-username">
-        <button type="button" className="btn btn-outline-danger ml-1" onClick={this.handleSignOut}>
-          Sign out
-        </button>
-          </div>
-        )}
+  const logoutButton = (
+    <div className="container">
+
+    <form action="/api/sessions" method="post">
+      <div className="navbar-layout">
+      <h4 className='navbar-username' onClick={toggleDropdown}>{username}</h4>
+      {isOpen && (
+        <div className="dropdown-username">
+      <button type="button" className="btn btn-outline-danger ml-1" onClick={handleSignOut}>
+        Sign out
+      </button>
         </div>
-      </form>
+      )}
       </div>
-      
-    );
-  
-    // Render the layout with the navigation bar and footer
-    return (
-      <React.Fragment>
+    </form>
+    </div>
+    
+  );
 
-        <nav className="navbar navbar-expand navbar-light home-background">
+  return (
+    <React.Fragment>
+      <nav className="navbar navbar-expand navbar-light home-background">
           
           <div className="container-fluid">
             {/* Reddit logo */}
@@ -135,7 +131,7 @@ class Layout extends Component {
         </nav>
                         <div className="footer">
         {/* Render the child components */}
-        {this.props.children}
+        {props.children}
         {/* Footer */}
         <footer className="p-3 home-background ">
           <div>
@@ -143,10 +139,8 @@ class Layout extends Component {
           </div>
         </footer>
                   </div>
-      </React.Fragment>
-    );
-  }
-  
-}
+    </React.Fragment>
+  );
+};
 
 export default Layout;
