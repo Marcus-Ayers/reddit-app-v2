@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { handleErrors } from '@utils/fetchHelper';
 
 const CreatePost = ({ userId, subredditId }) => {
-  const [state, setState] = useState({
-    isOpen: false,
-    title: '',
-    body: '',
-  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
   const toggleDropdown = () => {
-    setState(prevState => ({ ...prevState, isOpen: !prevState.isOpen }));
-    if (!state.isOpen) {
+    setIsOpen(prevIsOpen => !prevIsOpen);
+    if (!isOpen) {
       setTimeout(() => {
         document.getElementById('title').focus();
       }, 0);
@@ -19,15 +17,15 @@ const CreatePost = ({ userId, subredditId }) => {
 
   const handleChange = event => {
     const { name, value } = event.target;
-    setState({
-      ...state,
-      [name]: value,
-    });
+    if (name === 'title') {
+      setTitle(value);
+    } else if (name === 'body') {
+      setBody(value);
+    }
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-    const { title, body } = state;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     fetch(`/api/subreddits/${subredditId}/posts`, {
@@ -46,12 +44,9 @@ const CreatePost = ({ userId, subredditId }) => {
       .then(handleErrors)
       .then(data => {
         console.log(data);
-        setState({
-          ...state,
-          isOpen: false,
-          title: '',
-          body: '',
-        });
+        setIsOpen(false);
+        setTitle('');
+        setBody('');
         window.location.reload();
       })
       .catch(error => {
@@ -59,8 +54,6 @@ const CreatePost = ({ userId, subredditId }) => {
         window.alert("You need to be logged in to create a post");
       });
   };
-
-  const { isOpen, title, body } = state;
 
   return (
     <div className="container">

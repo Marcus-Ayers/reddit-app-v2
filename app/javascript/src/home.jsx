@@ -3,32 +3,30 @@ import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { handleErrors } from '@utils/fetchHelper';
 
-const Home = () => {
-  const [state, setState] = useState({
-    isOpen: false,
-    name: '',
-    description: '',
-    posts: [],
-    subreddits: [],
-  });
+const Home = (props) => {
+  const [posts, setPosts] = useState([]);
+  const [subreddits, setSubreddits] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const toggleDropdown = () => {
-    setState(prevState => ({
-      ...prevState,
-      isOpen: !prevState.isOpen,
-    }));
+    setIsOpen(prevIsOpen => !prevIsOpen);
   };
 
   const handleChange = event => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    if (name === 'name') {
+      setName(value);
+    } else if (name === 'description') {
+      setDescription(value);
+    }
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-    const { name, description } = state;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     fetch('/api/subreddits', {
@@ -45,12 +43,9 @@ const Home = () => {
       .then(handleErrors)
       .then(data => {
         console.log(data);
-        setState({
-          ...state,
-          isOpen: false,
-          name: '',
-          description: '',
-        });
+        setIsOpen(false);
+        setName('');
+        setDescription('');
         window.location.reload();
       })
       .catch(error => {
@@ -62,26 +57,42 @@ const Home = () => {
   useEffect(() => {
     fetch(`/api/posts/all`)
       .then(handleErrors)
-      .then(data => {
-        setState(prevState => ({
-          ...prevState,
-          posts: data.posts,
-          loading: false,
-        }));
+      // .then(data => {
+      //   setState(prevState => ({
+      //     ...prevState,
+      //     posts: data.posts,
+      //     loading: false,
+      //   }));
+      // });
+      .then((data) => {
+        setPosts(data.posts);
+        setAuthenticated(data.authenticated);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
       });
 
     fetch(`/api/subreddits`)
       .then(handleErrors)
-      .then(data => {
-        setState(prevState => ({
-          ...prevState,
-          subreddits: data.subreddits,
-          loading: false,
-        }));
+      // .then(data => {
+      //   setState(prevState => ({
+      //     ...prevState,
+      //     subreddits: data.subreddits,
+      //     loading: false,
+      //   }));
+      // });
+      .then((data) => {
+        setSubreddits(data.subreddits);
+        setAuthenticated(data.authenticated);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
       });
   }, []);
 
-  const { posts, subreddits, isOpen, name, description } = state;
+  // const { posts, subreddits, isOpen, name, description } = state;
 
   return (
     <Layout>

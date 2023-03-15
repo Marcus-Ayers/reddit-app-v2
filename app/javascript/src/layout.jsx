@@ -4,23 +4,18 @@ import { safeCredentials, handleErrors } from '@utils/fetchHelper';
 
 
 const Layout = (props) => {
-  const [state, setState] = useState({
-    isOpen: false,
-    authenticated: false,
-    username: [],
-    show_login: true,
-  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [username, setUsername] = useState([]);
+  const [show_login, setShowLogin] = useState(true);
 
   useEffect(() => {
     fetch('/api/authenticated')
       .then(handleErrors)
       .then(data => {
         console.log(data);
-        setState({
-          ...state,
-          username: data.username,
-          authenticated: data.authenticated,
-        });
+        setUsername(data.username);
+        setAuthenticated(data.authenticated);
       })
       .catch(error => {
         console.error("Not Logged in " + error);
@@ -28,39 +23,12 @@ const Layout = (props) => {
   }, []);
 
   const toggleDropdown = () => {
-    setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
-    if (!state.isOpen) {
+    setIsOpen(prevIsOpen => !prevIsOpen);
+    if (!isOpen) {
       setTimeout(() => {
         document.getElementById('title');
       }, 0);
     }
-  };
-
-  const toggle = () => {
-    setState({
-      ...state,
-      show_login: !state.show_login,
-    });
-  };
-
-  const handleLogout = () => {
-    // Send a DELETE request to the '/sessions' endpoint to log the user out
-    fetch('/sessions', {
-      method: 'DELETE',
-      credentials: 'same-origin'
-    })
-    .then(response => {
-      if (response.ok) {
-        // Reload the page if the response is OK (successful logout)
-        window.location.reload();
-      } else {
-        // Throw an error if the response is not OK (failed logout)
-        throw new Error('Failed to logout');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
   };
 
   const handleSignOut = () => {
@@ -79,8 +47,6 @@ const Layout = (props) => {
       }
     });
   }
-
-  const { authenticated, username, isOpen } = state;
 
   const logoutButton = (
     <div className="container">
