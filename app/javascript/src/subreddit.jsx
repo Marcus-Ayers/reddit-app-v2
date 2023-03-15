@@ -1,64 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { handleErrors } from '@utils/fetchHelper';
 import Create_post from './create_post';
 
-class Subreddit extends React.Component {
-  state = {
-    subreddit: [],
-    posts: [],
-    loading: true,
-  }
+const Subreddit = (props) => {
+  const [posts, setPosts] = useState([]);
+  const [subreddit, setSubreddit] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
-  
-  componentDidMount() {
-    fetch(`/api/subreddits/${this.props.subreddit_id}`)
+  useEffect(() => {
+    fetch(`/api/subreddits/${props.subreddit_id}`)
       .then(handleErrors)
-      .then(data => {
-        // console.log("hello9")
-        this.setState({
-          subreddit: data.subreddit,
-          loading: false,
-        })
+      .then((data) => {
+        setSubreddit(data.subreddit);
+        setAuthenticated(data.authenticated);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
       });
     
-    fetch(`/api/subreddits/${this.props.subreddit_id}/posts`)
+    fetch(`/api/subreddits/${props.subreddit_id}/posts`)
       .then(handleErrors)
-      .then(data => {
-        // console.log("hello8")
-        this.setState({
-          posts: data.posts,
-          loading: false,
-        })
+      .then((data) => {
+        setPosts(data.posts);
+        setAuthenticated(data.authenticated);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
       });
+  }, []);
+
+  if (loading) {
+    return <p>loading...</p>;
   }
-  
-  
-  
-  
 
-  render () {
-    const { subreddit, loading, posts } = this.state;
-    if (loading) {
-      return <p>loading...</p>;
-    };
-
-    const {
-      id,
-      name,
-      description,
-      created_at,
-    } = subreddit
-    // console.log("subreddit.jsx " + name)
-   
-
-    return (
-      <Layout>
-        <div className="container background">
+  const description = subreddit?.description;
+  const name = subreddit?.name;
+  
+  return (
+    <Layout>
+      <div className="container background">
           <div className="row">
             <div className="col-7 mr-5 content">
-              <Create_post subredditId={this.props.subreddit_id}/>
+              <Create_post subredditId={props.subreddit_id}/>
               <div className="posts123">
                 {posts.length === 0 ? (
                   <h6 className='text-white' >There are no posts in this subreddit yet.</h6>
@@ -76,7 +64,7 @@ class Subreddit extends React.Component {
                             <p className='post-info user-name'>Posted by u/{post.user.username} - {dateToString}</p>
                           </a>
                         </div>
-                        <a href={`${this.props.subreddit_id}/post/${post.id}`}>
+                        <a href={`${props.subreddit_id}/post/${post.id}`}>
                           <h6 className="mb-3 post-title">{post.title}</h6>
                         </a>                  
                       </div>
@@ -95,11 +83,9 @@ class Subreddit extends React.Component {
             </div>
           </div>
         </div>
-      </Layout>
-    );
-    
-  }
-}
+    </Layout>
+  );
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('params');
@@ -108,5 +94,5 @@ document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Subreddit subreddit_id={data.subreddit_id} />,
     document.body.appendChild(document.createElement('div')),
-  )
-})
+  );
+});
