@@ -1,41 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { handleErrors } from '@utils/fetchHelper';
 
+const Home = () => {
+  const [state, setState] = useState({
+    isOpen: false,
+    name: '',
+    description: '',
+    posts: [],
+    subreddits: [],
+  });
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      name: '',
-      description: '',
-      posts: [],
-      subreddits: [],
-    }
-    this.toggleDropdown = this.toggleDropdown.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  toggleDropdown() {
-    this.setState(prevState => ({
-      isOpen: !prevState.isOpen
+  const toggleDropdown = () => {
+    setState(prevState => ({
+      ...prevState,
+      isOpen: !prevState.isOpen,
     }));
-  }
+  };
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
+  const handleChange = event => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.value,
     });
-  }
+  };
 
-  handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const { name, description } = this.state;
+    const { name, description } = state;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  
+
     fetch('/api/subreddits', {
       method: 'POST',
       headers: {
@@ -48,54 +43,49 @@ class Home extends React.Component {
       }),
     })
       .then(handleErrors)
-      .then((data) => {
+      .then(data => {
         console.log(data);
-        this.setState({
+        setState({
+          ...state,
           isOpen: false,
           name: '',
           description: '',
         });
         window.location.reload();
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(error => {
+        console.log(error);
         window.alert("You need to be logged in to create a subreddit");
-
       });
   };
-  
-  
-  componentDidMount() {
+
+  useEffect(() => {
     fetch(`/api/posts/all`)
       .then(handleErrors)
       .then(data => {
-        // console.log(data)
-        this.setState({
+        setState(prevState => ({
+          ...prevState,
           posts: data.posts,
           loading: false,
-          
-        })
-      })  
+        }));
+      });
 
-      fetch(`/api/subreddits`)
+    fetch(`/api/subreddits`)
       .then(handleErrors)
       .then(data => {
-        // console.log(data)
-        this.setState({
+        setState(prevState => ({
+          ...prevState,
           subreddits: data.subreddits,
           loading: false,
-        })
-      }) 
-  }
-  
+        }));
+      });
+  }, []);
 
-  render () {
-    const {posts, subreddits, isOpen, name, description } = this.state;
-  //   const date = new Date(post.created_at)
-  //  const dateToString = date.toLocaleString();
-    return (
-      <Layout>
-        <div className="container background">
+  const { posts, subreddits, isOpen, name, description } = state;
+
+  return (
+    <Layout>
+      <div className="container background">
           <div className="row">
             <div className="col-7 mr-5 content">
               <h1 className='home-page-banner'> Home </h1>
@@ -140,13 +130,13 @@ class Home extends React.Component {
               <div className="dropdown sub-button-border">
         <button
           type="button" className="btn btn-light create-subreddit-button"
-          onClick={this.toggleDropdown}
+          onClick={toggleDropdown}
         >
           Create Subreddit
         </button>
         {isOpen && (
           <div className="dropdown-menu">
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className='text-white'  htmlFor="name">Name</label>
                 <input
@@ -155,7 +145,7 @@ class Home extends React.Component {
                   id="name"
                   name="name"
                   value={name}
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -167,7 +157,7 @@ class Home extends React.Component {
                   name="description"
                   rows="3"
                   value={description}
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -181,14 +171,13 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
-      </Layout>
-    )
-  }
-}
+    </Layout>
+  );
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Home />,
     document.body.appendChild(document.createElement('div')),
-  )
-})
+  );
+});

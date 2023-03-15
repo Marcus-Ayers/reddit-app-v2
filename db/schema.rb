@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2023_02_08_221139) do
+
   create_table "comments", force: :cascade do |t|
     t.string "body"
     t.integer "post_id", null: false
