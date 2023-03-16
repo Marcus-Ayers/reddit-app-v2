@@ -23,9 +23,12 @@ module Api
     end
 
     def index
-      @comments = Comment.order(created_at: :desc)
+      @post = Post.find_by(id: params[:post_id])
+      return render json: { error: 'not_found_post' }, status: :not_found unless @post
+    
+      @comments = @post.comments.order(created_at: :desc)
       return render json: { error: 'not_found' }, status: :not_found if !@comments
-
+    
       render 'api/comments/index', status: :ok
     end
 
