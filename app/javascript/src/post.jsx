@@ -165,12 +165,16 @@ const handleChange = event => {
 
             <div className="row">
                 <div className="col-7 post-background">
-                <div className="form-group">
-                  <form onSubmit={handleSubmit}>
-                    <label className='post-title-big' htmlFor="title">Create Comment</label>
-                    <textarea type='text' className='form-control text-white' id='title' name='body' rows='5' value={body} onChange={handleChange} />
-                    <button type='submit'>Submit</button>
-                  </form>
+                  <div className="form-group">
+                    <form onSubmit={handleSubmit}>
+                      <label className='post-title-big' htmlFor="title">Create Comment</label>
+                      <div className="comment-box">
+                      <textarea type='text' className='form-control text-white' id='title' name='body' rows='5' value={body} onChange={handleChange} />
+                      <div className="comment-tools">
+                      <button className='btn btn-light comment-button' type='submit'>Submit</button>
+                      </div>
+                      </div>
+                    </form>
                   </div>
                 {
                   comment.map(comment => {

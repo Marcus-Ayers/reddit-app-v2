@@ -164,6 +164,34 @@ body  {
   align-items: center;
   margin-bottom: 20px;
 }
+
+.comment-box {
+  border: 1px solid #ccc; /* Change the border color and width as needed */
+  position: relative;
+  border-radius: 5px;
+}
+
+.comment-tools {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comment-button {
+  color: grey;
+  padding: 0px 25px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0px;
+  transition-duration: 0.4s;
+  border-radius: 25px;
+  margin: 5px;
+
+}
+
 // --------------------
 
 
@@ -255,6 +283,7 @@ body  {
 
 }
 
+
 .logo {
   margin-right: 10px;
   height: 40px;
@@ -299,11 +328,15 @@ body  {
 
 }
 
-.footer {
+.footer-container {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; 
+}
+
+.footer {
+  margin-top: 75px;
 }
 
 // --------------------------

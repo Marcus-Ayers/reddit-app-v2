@@ -95,11 +95,11 @@ const Layout = (props) => {
             </div>
           </div>
         </nav>
-                        <div className="footer">
+                        <div className="footer-containter">
         {/* Render the child components */}
         {props.children}
         {/* Footer */}
-        <footer className="p-3 home-background ">
+        <footer className="p-3 home-background footer">
           <div>
             <p className="me-3 mb-0 text-secondary">Reddit Clone</p>
           </div>
