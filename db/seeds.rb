@@ -19,9 +19,9 @@
 # Post.create(title: 'some news', body: 'news stuff', subreddit: subreddit3, user: User.third)
 
 # create some sample comments
-Comment.create(body: 'This is a sample comment', post: Post.first, user: User.first)
-Comment.create(body: 'Comment number two', post: Post.first, user: User.first)
-Comment.create(body: 'This is a sample comment', post: Post.second, user: User.third)
+# Comment.create(body: 'This is a sample comment', post: Post.first, user: User.first)
+# Comment.create(body: 'Comment number two', post: Post.first, user: User.first)
+# Comment.create(body: 'This is a sample comment', post: Post.second, user: User.third)
 
 # when "production"
 #    # create some sample users
