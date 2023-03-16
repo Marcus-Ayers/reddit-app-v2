@@ -25,6 +25,7 @@ const Post = (props) => {
     fetch(`/api/subreddits/${props.subreddit_id}`)
       .then(handleErrors)
       .then((data) => {
+        // console.log(data)
         setSubreddit(data.subreddit);
         setLoading(false);
       });
@@ -36,17 +37,20 @@ const Post = (props) => {
         setLoading(false);
       });
 
-    fetch(`/api/subreddits/${props.subreddit_id}/posts`)
-      .then(handleErrors)
-      .then((data) => {
-        setLoading(false);
-      });
+    // fetch(`/api/subreddits/${props.subreddit_id}/posts`)
+    //   .then(handleErrors)
+    //   .then((data) => {
+    //     setLoading(false);
+    //   });
 
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments`)
       .then(handleErrors)
       .then((data) => {
+        // console.log(data.comments.length)
+        setComment(data.comments)
         setLoading(false);
       });
+
   }, [props.subreddit_id, props.post_id]);
 
   const removePost = (e) => {
@@ -88,6 +92,7 @@ const Post = (props) => {
   const dateToString = date?.toLocaleString();
   const postUser = post?.user ? post.user.username : "";
   const username2 = post?.user?.username;
+  const comment1 = comment[0]?.body;
 
   return (
     <Layout>
@@ -107,7 +112,6 @@ const Post = (props) => {
                 <h3 className="mb-0 post-title-big">{title}</h3>
                 <p className="mb-0 post-description"><small><b>{post?.body}</b></small></p>
               </div>
-              <hr />
               </div>
             </div>
             <div className="col-4 info">
@@ -120,6 +124,38 @@ const Post = (props) => {
               <h1>{body}</h1>
             </div>
           </div>
+
+            <div className="row">
+                <div className="col-7 post-background">
+                <div className="form-group">
+                    <label className='post-title-big' htmlFor="title">Create Comment</label>
+                    {/* <input type="text" className="form-control text-white" id="title" name="title"/> */}
+                    <textarea type='text' className='form-control text-white' id='title' name='title' rows='5' />
+                  </div>
+                {
+                  comment.reverse().map(comment => {
+                    // console.log(comment)
+                    return (
+                      <div key={comment.id} className="">
+                        <div className="container">
+                          <div className="row comment-container">
+                            <div className="p-0">
+                              <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='comment-image'></img>
+                            </div>
+                            <div className="col p-0">
+                            <a href={`/user/${post.user.id}`}>
+                              <p className='comment-username'>u/{comment.user.username}</p>
+                            </a>
+                              <p className='comment'>{comment.body}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+                </div>
+            </div>
         </div>
     </Layout>
   );

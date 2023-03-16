@@ -5,8 +5,11 @@ Rails.application.routes.draw do
   get 'subreddit/:sub_id/post/:post_id' => 'static_pages#post'
   get '/user/:user_id' => 'static_pages#user'
   get '/login' => 'static_pages#login'
+  delete '/sessions' => 'sessions#destroy'
+
   
   namespace :api do
+    delete '/subreddits/:sub_id/posts/:post_id' => 'posts#destroy'
     resources :users, except: [:destroy] do
       resources :subscriptions, only: [:index]
     end

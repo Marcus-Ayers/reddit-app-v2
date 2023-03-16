@@ -18,10 +18,10 @@
 # Post.create(title: 'knock knock', body: 'whos there', subreddit: subreddit2, user: User.second)
 # Post.create(title: 'some news', body: 'news stuff', subreddit: subreddit3, user: User.third)
 
-# # create some sample comments
-# Comment.create(body: 'This is a sample comment', post: Post.first, user: User.first)
-# Comment.create(body: 'This is a sample comment', post: Post.second, user: User.second)
-# Comment.create(body: 'This is a sample comment', post: Post.third, user: User.third)
+# create some sample comments
+Comment.create(body: 'This is a sample comment', post: Post.first, user: User.first)
+Comment.create(body: 'Comment number two', post: Post.first, user: User.first)
+Comment.create(body: 'This is a sample comment', post: Post.second, user: User.third)
 
 # when "production"
 #    # create some sample users

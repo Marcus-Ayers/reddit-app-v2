@@ -40,6 +40,7 @@ const Subreddit = (props) => {
 
   const description = subreddit?.description;
   const name = subreddit?.name;
+
   
   return (
     <Layout>
