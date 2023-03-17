@@ -12,6 +12,7 @@ const Post = (props) => {
   const [username, setUsername] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
 
+  // ------------FETCH REQUESTS AND SETTING THE STATE------------
   useEffect(() => {
     fetch('/api/authenticated')
       .then(handleErrors)
@@ -37,12 +38,6 @@ const Post = (props) => {
         setLoading(false);
       });
 
-    // fetch(`/api/subreddits/${props.subreddit_id}/posts`)
-    //   .then(handleErrors)
-    //   .then((data) => {
-    //     setLoading(false);
-    //   });
-
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments`)
       .then(handleErrors)
       .then((data) => {
@@ -52,6 +47,7 @@ const Post = (props) => {
 
   }, [props.subreddit_id, props.post_id]);
 
+// ------------FUNCTION TO REMOVE A POST------------
   const removePost = (e) => {
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}`, safeCredentials({
       method: 'DELETE',
@@ -76,6 +72,7 @@ const Post = (props) => {
   });
   };
 
+  // ------------FUNCTION TO REMOVE A COMMENT------------
   const removeComment = (comment_id) => {
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments/${comment_id}`, safeCredentials({
       method: 'DELETE',
@@ -87,6 +84,7 @@ const Post = (props) => {
       return response.json();
     })
     .then(data => {
+      //------------UPDATES THE STATE WHEN THE COMMENT IS REMOVED------------
       if (data.success) {
         setComment(comment.filter(c => c.id !== comment_id));
       }
@@ -99,14 +97,14 @@ const Post = (props) => {
     });
   };
   
-
-const handleChange = event => {
+  // ------------EVENT HANDLER FOR COMMENTS FORM------------
+  const handleChange = event => {
     const { name, value } = event.target;
     if (name === 'body') {
       setBody(value);
     } 
   };
-
+  // ------------FUNCTION THAT UPDATES THE STATE WHEN A COMMENT IS POSTED------------
   const handleSubmit = event => {
     event.preventDefault();
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -133,6 +131,7 @@ const handleChange = event => {
             username: username,
           },
         };
+        //------------SPREAD THE STATE AND ADD THE 'newComment' SO IT DISPLAYS WITHOUT PAGE REFRESH------------
         setComment([...comment, newComment]);
         setBody('');
       })
@@ -141,12 +140,7 @@ const handleChange = event => {
         window.alert("You need to be logged in to create a comment");
       });
   };
-  
-  
-  
-  
-
-
+  // ---------------------------------------------
 
   if (loading) {
     return <p>loading...</p>;
@@ -154,19 +148,16 @@ const handleChange = event => {
 
   const description = subreddit?.description;
   const name = subreddit?.name;
-  const id = post?.id;
   const title = post?.title;
-  // const body = comment?.body;
   const date = new Date(post?.created_at);
   const dateToString = date?.toLocaleString();
   const postUser = post?.user ? post.user.username : "";
-  const username2 = post?.user?.username;
-  const comment1 = comment[0]?.body;
 
   return (
     <Layout>
        <div className="container">
           <div className="row">
+            {/* ------------SHOWS THE POST CONTENTS------------- */}
             <div className=" col-7 mr-5 mb-3 post-background">
               <div className="">
               <div className="mb-3">
@@ -183,6 +174,7 @@ const handleChange = event => {
               </div>
               </div>
             </div>
+            {/* ----------THE SUBREDDIT INFO BOX TO THE RIGHT------------ */}
             <div className="col-4 info">
               <div className="info-box-container">
               <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image'></img>
@@ -192,7 +184,7 @@ const handleChange = event => {
               <p className='description-infobox'>{description || "N/A"}</p>
             </div>
           </div>
-
+          {/* ------------COMMENTS SECTION-------------- */}
             <div className="row">
                 <div className="col-7 post-background">
                   <div className="form-group form-bottom-border">
@@ -212,8 +204,8 @@ const handleChange = event => {
                       </div>
                     </form>
                   </div>
-                {
-                  comment.map((comment, index)=> {
+                  {/* MAPS THROUGH ALL THE COMMENTS FOR THE POST */}
+                {comment.map((comment, index)=> {
                     return (
                       <div key={comment?.id || index } className="">
                         <div className="container">
@@ -228,9 +220,8 @@ const handleChange = event => {
                               <p className='comment'>{comment?.body}</p>
                             </div>
                             { username === comment?.user?.username &&
-                            
                               <i className="fas fa-times delete-comment-icon" onClick={() => removeComment(comment?.id)}></i>
-                               }
+                            }
                           </div>
                         </div>
                       </div>
