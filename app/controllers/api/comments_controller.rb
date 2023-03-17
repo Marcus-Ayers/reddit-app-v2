@@ -41,7 +41,23 @@ module Api
         }
       end
     end
-    
+
+    def update
+      comment = Comment.find(params[:id])
+      token = cookies.signed[:reddit_session_token]
+      session = Session.find_by(token: token)
+      user = session.user
+      # Ensure the current user is the owner of the comment before updating
+      if user && user.id == comment.user_id
+        if comment.update(comment_params)
+          render json: { success: true, comment: comment }, status: :ok
+        else
+          render json: { success: false, errors: comment.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        render json: { success: false, error: "Unauthorized" }, status: :unauthorized
+      end
+    end
 
     def index
       @post = Post.find_by(id: params[:post_id])

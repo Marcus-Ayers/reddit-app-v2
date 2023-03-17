@@ -11,6 +11,10 @@ const Post = (props) => {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
+
 
   // ------------FETCH REQUESTS AND SETTING THE STATE------------
   useEffect(() => {
@@ -140,7 +144,35 @@ const Post = (props) => {
         window.alert("You need to be logged in to create a comment");
       });
   };
-  // ---------------------------------------------
+  //------------CHECKS IF YOU ARE EDITING A COMMENT------------
+  const startEditing = (commentId) => {
+    setEditingCommentId(commentId);
+  };
+//------------TOGGLES DROPDOWN FOR EDIT/DELETE------------
+  const toggleDropdown = (commentId) => {
+    setOpenDropdownId(openDropdownId === commentId ? null : commentId);
+  };
+//------------PATCH THAT SAVES A COMMENT AFTER EDIT------------
+  const saveComment = (commentId, updatedBody) => {
+    fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments/${commentId}`, safeCredentials({
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ comment: { body: updatedBody } }),
+    }))
+      .then(handleErrors)
+      .then(data => {
+        const updatedComments = comment.map(c => c.id === commentId ? { ...c, body: updatedBody } : c);
+        setComment(updatedComments);
+        setEditingCommentId(null);
+      })
+      .catch(error => {
+        console.error(error);
+        alert('There was a problem updating the comment. Please try again later.');
+      });
+  };
+  
 
   if (loading) {
     return <p>loading...</p>;
@@ -162,7 +194,7 @@ const Post = (props) => {
               <div className="">
               <div className="mb-3">
               <a href={`/user/${post?.user?.id}`}>
-              <p className='post-info'>Posted by u/{post?.user?.username} - {dateToString}</p>
+              <p className='post-info ml-0'>Posted by u/{post?.user?.username} - {dateToString}</p>
               </a>
               {username === postUser &&
               <a href={'/subreddit/1'} >
@@ -178,7 +210,6 @@ const Post = (props) => {
             <div className="col-4 info">
               <div className="info-box-container">
               <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image'></img>
-
               <h2 className='name-infobox'>{name || "N/A"}</h2>
               </div>
               <p className='description-infobox'>{description || "N/A"}</p>
@@ -190,44 +221,74 @@ const Post = (props) => {
                   <div className="form-group form-bottom-border">
                     <form onSubmit={handleSubmit}>
                       <label className='comment-header' htmlFor="title">Comment as 
-                      <span className="username-color ml-1">
-                      <a href={`/user/${post?.user?.id}`}>
-                      {post?.user?.username}
-                      </a>
-                      </span>
+                        <span className="username-color ml-1">
+                          <a href={`/user/${post?.user?.id}`}>
+                            {post?.user?.username}
+                          </a>
+                        </span>
                       </label>
                       <div className="comment-box">
-                      <textarea type='text' className='form-control text-white no-border' id='title' name='body' placeholder='What are your thoughts?' rows='5' value={body} onChange={handleChange} />
-                      <div className="comment-tools">
-                      <button className='btn btn-light comment-button' type='submit'>Submit</button>
-                      </div>
+                        <textarea type='text' className='form-control text-white no-border' id='title' name='body' placeholder='What are your thoughts?' rows='5' value={body} onChange={handleChange} />
+                        <div className="comment-tools">
+                          <button className='btn btn-light comment-button' type='submit'>Submit</button>
+                        </div>
                       </div>
                     </form>
                   </div>
                   {/* MAPS THROUGH ALL THE COMMENTS FOR THE POST */}
-                {comment.map((comment, index)=> {
+                  {comment.map((comment, index) => {
+                    const isEditing = editingCommentId === comment?.id;
                     return (
-                      <div key={comment?.id || index } className="">
+                      <div key={comment?.id || index} className="">
                         <div className="container">
                           <div className="row comment-container">
-                            <div className="p-0">
-                              <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='comment-image'></img>
-                            </div>
+                            {/* <div className="p-0">
+                              <img src="https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png" className="comment-image"></img>
+                            </div> */}
                             <div className="col p-0">
-                            <a href={`/user/${post?.user?.id}`}>
-                              <p className='comment-username'>u/{comment?.user?.username}</p>
-                            </a>
-                              <p className='comment'>{comment?.body}</p>
+                              <div className="icon-name-container">
+                            <img src="https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png" className="comment-image"></img>
+
+                              <a className='d-flex align-items-center' href={`/user/${post?.user?.id}`}>
+                                <p className="comment-username">u/{comment?.user?.username}</p>
+                              </a>
+                              </div>
+                              {isEditing ? (
+                                <div className="editing-container">
+                                  <textarea className="form-control text-white" id={`comment-${comment.id}`} defaultValue={comment?.body} rows='5' onBlur={(e) => saveComment(comment?.id, e.target.value)} />
+                                <div className="comment-tools">
+                                {isEditing && (
+                                  <button
+                                    className="btn btn-light comment-button save-comment-button" onClick={() =>
+                                      saveComment(comment?.id, document.querySelector(`#comment-${comment.id}`).value)}>Save
+                                  </button>
+                                )}
+                                </div>
+                                </div>
+                              ) : (
+                                <p className="comment">{comment?.body}</p>
+                              )}
                             </div>
-                            { username === comment?.user?.username &&
-                              <i className="fas fa-times delete-comment-icon" onClick={() => removeComment(comment?.id)}></i>
-                            }
+                            {username === comment?.user?.username && (
+                              <>
+                                <div className="dropdown">
+                                  {!isEditing && (
+                                    <i className="fas fa-ellipsis-v toggle-button" onClick={() => toggleDropdown(comment.id)}></i>
+                                  )}
+                                  {openDropdownId === comment.id && (
+                                    <div className="dropdown-menu">
+                                      <a className="dropdown-item" onClick={() => {startEditing(comment?.id); setOpenDropdownId(null)}}>Edit </a>
+                                      <a className="dropdown-item" onClick={() => {removeComment(comment?.id); setOpenDropdownId(null)}}> Delete </a>
+                                    </div>
+                                  )}
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
-                    )
-                  })
-                }
+                    );
+                  })}
                 </div>
             </div>
         </div>

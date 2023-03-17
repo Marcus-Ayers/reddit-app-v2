@@ -7,6 +7,24 @@ body  {
   background-color : #7b7f83!important; 
 }
 
+.toggle-button {
+  padding: 5px;
+  color: rgb(111, 111, 111);
+}
+
+.toggle-button:hover {
+  background-color: rgba(147, 147, 147, 0.285);
+  border-radius: 3px;
+}
+
+.dropdown-item {
+  color: white!important;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(147, 147, 147, 0.285)!important;
+  cursor: pointer;
+}
 
 
 //LOGIN AND SIGNUP BUTTONS
@@ -148,9 +166,8 @@ body  {
 .comment-username {
   color: white;
   margin: 0px;
-  margin-left: 10px;
   font-size: small;
-
+  margin-left: 5px;
 }
 
 .comment-image {
@@ -200,7 +217,7 @@ textarea.no-border {
 }
 
 textarea.form-control {
-  background-color: #212529;
+  background-color: #1A1A1B!important;
 }
 
 .comment-header {
@@ -226,6 +243,10 @@ textarea.form-control {
 
 .delete-comment-icon:hover {
   color: #393939;
+}
+
+.icon-name-container {
+  display: flex;
 }
 
 // --------------------
