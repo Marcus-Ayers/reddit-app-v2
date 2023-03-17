@@ -5,11 +5,11 @@ import { handleErrors, safeCredentials } from '@utils/fetchHelper';
 
 const Post = (props) => {
   const [body, setBody] = useState('');
-  const [post, setPost] = useState([]);
-  const [subreddit, setSubreddit] = useState([]);
+  const [post, setPost] = useState(null);
+  const [subreddit, setSubreddit] = useState(null);
   const [comment, setComment] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState([]);
+  const [username, setUsername] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,6 @@ const Post = (props) => {
     fetch(`/api/subreddits/${props.subreddit_id}`)
       .then(handleErrors)
       .then((data) => {
-        // console.log(data)
         setSubreddit(data.subreddit);
         setLoading(false);
       });
@@ -47,7 +46,6 @@ const Post = (props) => {
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments`)
       .then(handleErrors)
       .then((data) => {
-        // console.log(data.comments.length)
         setComment(data.comments.reverse())
         setLoading(false);
       });
@@ -59,14 +57,12 @@ const Post = (props) => {
       method: 'DELETE',
   }))
   .then(response => {
-    // console.log(response)
       if (!response.ok) {
           throw Error(response.statusText);
       }
       return response.json();
   })
   .then(data => {
-      console.log(data); 
       if (data.success) {
         window.location.href = '/';
       }
@@ -80,6 +76,30 @@ const Post = (props) => {
   });
   };
 
+  const removeComment = (comment_id) => {
+    fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments/${comment_id}`, safeCredentials({
+      method: 'DELETE',
+    }))
+    .then(response => {
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        setComment(comment.filter(c => c.id !== comment_id));
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      setState({
+          error: 'Sorry, there was a problem deleting the comment. Please try again later.'
+      });
+    });
+  };
+  
+
 const handleChange = event => {
     const { name, value } = event.target;
     if (name === 'body') {
@@ -90,7 +110,7 @@ const handleChange = event => {
   const handleSubmit = event => {
     event.preventDefault();
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
+  
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}/comments`, {
       method: 'POST',
       headers: {
@@ -105,9 +125,15 @@ const handleChange = event => {
     })
       .then(handleErrors)
       .then(data => {
-        console.log(data);
-        window.location.reload();
-        // setComment([...comment, data.comment]);
+        console.log(data)
+        const newComment = {
+          id: data.id,
+          body: data.body,
+          user: {
+            username: username,
+          },
+        };
+        setComment([...comment, newComment]);
         setBody('');
       })
       .catch(error => {
@@ -115,6 +141,10 @@ const handleChange = event => {
         window.alert("You need to be logged in to create a comment");
       });
   };
+  
+  
+  
+  
 
 
 
@@ -183,10 +213,9 @@ const handleChange = event => {
                     </form>
                   </div>
                 {
-                  comment.map(comment => {
-                    // console.log(comment)
+                  comment.map((comment, index)=> {
                     return (
-                      <div key={comment.id} className="">
+                      <div key={comment?.id || index } className="">
                         <div className="container">
                           <div className="row comment-container">
                             <div className="p-0">
@@ -194,10 +223,14 @@ const handleChange = event => {
                             </div>
                             <div className="col p-0">
                             <a href={`/user/${post?.user?.id}`}>
-                              <p className='comment-username'>u/{comment.user.username}</p>
+                              <p className='comment-username'>u/{comment?.user?.username}</p>
                             </a>
-                              <p className='comment'>{comment.body}</p>
+                              <p className='comment'>{comment?.body}</p>
                             </div>
+                            { username === comment?.user?.username &&
+                            
+                              <i className="fas fa-times delete-comment-icon" onClick={() => removeComment(comment?.id)}></i>
+                               }
                           </div>
                         </div>
                       </div>

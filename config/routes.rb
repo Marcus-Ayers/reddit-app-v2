@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
     resources :subreddits, except: [:destroy] do
       resources :posts, only: [:index, :show, :create, :destroy] do
-        resources :comments, only: [:create, :update, :destroy, :index]
+        resources :comments, only: [:create, :update, :destroy, :index, :show]
       end
     end
     resources :votes, only: [:create, :update, :destroy]

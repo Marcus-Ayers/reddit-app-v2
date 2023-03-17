@@ -13,7 +13,7 @@ const Layout = (props) => {
     fetch('/api/authenticated')
       .then(handleErrors)
       .then(data => {
-        console.log(data);
+        // console.log(data);
         setUsername(data.username);
         setAuthenticated(data.authenticated);
       })

@@ -22,6 +22,27 @@ module Api
       end
     end
 
+    def destroy
+      token = cookies.signed[:reddit_session_token]
+      session = Session.find_by(token: token)
+    
+      return render json: { success: false } unless session
+    
+      user = session.user
+      comment = Comment.find_by(id: params[:id])
+    
+      if comment && (comment.user == user) && comment.destroy
+        render json: {
+          success: true,
+        }
+      else
+        render json: {
+          success: false,
+        }
+      end
+    end
+    
+
     def index
       @post = Post.find_by(id: params[:post_id])
       return render json: { error: 'not_found_post' }, status: :not_found unless @post
@@ -33,11 +54,10 @@ module Api
     end
 
     def show
-      @comment = Comment.find_by(id: params[:id])
-      return render json: { error: 'not_found' }, status: :not_found if !@post
-
-      render 'api/comments/show', status: :ok
+      @comment = Comment.find(params[:id])
+      render json: { comment: @comment }
     end
+    
     def comment_params
       params.require(:comment).permit(:body)
     end

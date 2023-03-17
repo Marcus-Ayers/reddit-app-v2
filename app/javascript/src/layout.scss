@@ -218,6 +218,16 @@ textarea.form-control {
   border-bottom: 1px solid rgb(53, 53, 53);
 }
 
+.delete-comment-icon {
+  cursor: pointer;
+  font-size: 16px;
+  color: #454545;
+}
+
+.delete-comment-icon:hover {
+  color: #393939;
+}
+
 // --------------------
 
 
