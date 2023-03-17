@@ -165,11 +165,17 @@ const handleChange = event => {
 
             <div className="row">
                 <div className="col-7 post-background">
-                  <div className="form-group">
+                  <div className="form-group form-bottom-border">
                     <form onSubmit={handleSubmit}>
-                      <label className='post-title-big' htmlFor="title">Create Comment</label>
+                      <label className='comment-header' htmlFor="title">Comment as 
+                      <span className="username-color ml-1">
+                      <a href={`/user/${post?.user?.id}`}>
+                      {post?.user?.username}
+                      </a>
+                      </span>
+                      </label>
                       <div className="comment-box">
-                      <textarea type='text' className='form-control text-white' id='title' name='body' rows='5' value={body} onChange={handleChange} />
+                      <textarea type='text' className='form-control text-white no-border' id='title' name='body' placeholder='What are your thoughts?' rows='5' value={body} onChange={handleChange} />
                       <div className="comment-tools">
                       <button className='btn btn-light comment-button' type='submit'>Submit</button>
                       </div>
@@ -187,7 +193,7 @@ const handleChange = event => {
                               <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='comment-image'></img>
                             </div>
                             <div className="col p-0">
-                            <a href={`/user/${post.user.id}`}>
+                            <a href={`/user/${post?.user?.id}`}>
                               <p className='comment-username'>u/{comment.user.username}</p>
                             </a>
                               <p className='comment'>{comment.body}</p>

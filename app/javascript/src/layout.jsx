@@ -95,7 +95,7 @@ const Layout = (props) => {
             </div>
           </div>
         </nav>
-                        <div className="footer-containter">
+                        <div className="footer-container">
         {/* Render the child components */}
         {props.children}
         {/* Footer */}
