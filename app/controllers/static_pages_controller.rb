@@ -1,4 +1,9 @@
 class StaticPagesController < ApplicationController
+
+  def submit
+    render 'submit'
+  end
+
   def home
     render 'home'
   end
