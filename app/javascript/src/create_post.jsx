@@ -5,7 +5,6 @@ const CreatePost = ({ userId, subredditId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-
   const toggleDropdown = () => {
     setIsOpen(prevIsOpen => !prevIsOpen);
     if (!isOpen) {
@@ -55,12 +54,16 @@ const CreatePost = ({ userId, subredditId }) => {
       });
   };
 
+  const navToSubmit = () => {
+    window.location.href='/submit'
+  };
+  
   return (
     <div className="container">
       <div className="row">
           <div className="col create-post-button mt-3 mb-3 d-flex align-items-center">
             <img src="https://www.redditstatic.com/avatars/avatar_default_02_94E044.png" alt="Italian Trulli" className="profile-pic"></img>
-            <input type="text" className="create-post mx-auto" onClick={toggleDropdown} placeholder="Create Post" />
+            <input type="text" className="create-post mx-auto" onClick={navToSubmit} placeholder="Create Post" />
 
             {isOpen && (
               <div className="dropdown-menu">

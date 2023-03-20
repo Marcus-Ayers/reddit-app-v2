@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { handleErrors } from '@utils/fetchHelper';
+import CreatePost from './create_post';
 
 const Home = (props) => {
   const [posts, setPosts] = useState([]);
@@ -100,6 +101,7 @@ const Home = (props) => {
           <div className="row">
             <div className="col-7 mr-5 content">
               <h1 className='home-page-banner'> Home </h1>
+              <CreatePost />
               <div className="posts123">
               {posts.length === 0 ? (
                   <h6 className='text-white' >There are no posts yet.</h6>
