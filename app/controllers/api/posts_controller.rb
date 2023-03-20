@@ -59,7 +59,7 @@ module Api
     private
 
     def post_params
-      params.require(:post).permit(:title, :body, :user_id, :subreddit_id)
+      params.require(:post).permit(:title, :body, :user_id, :subreddit_id, :image)
     end
   end
 end

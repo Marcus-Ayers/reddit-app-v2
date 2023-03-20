@@ -8,6 +8,12 @@ json.posts do
     json.comments post.comments
     json.subreddit post.subreddit
 
+    if post.image.attached?
+      json.image url_for(post.image)
+    else
+      json.image nil
+    end
+
     # json.subreddit do
     #   json.id post.subreddit.id
     # end

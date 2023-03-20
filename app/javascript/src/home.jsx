@@ -66,6 +66,7 @@ const Home = (props) => {
       //   }));
       // });
       .then((data) => {
+        console.log(data)
         setPosts(data.posts);
         setAuthenticated(data.authenticated);
         setLoading(false);
@@ -100,7 +101,6 @@ const Home = (props) => {
       <div className="container background">
           <div className="row">
             <div className="col-7 mr-5 content">
-              <h1 className='home-page-banner'> Home </h1>
               <CreatePost />
               <div className="posts123">
               {posts.length === 0 ? (

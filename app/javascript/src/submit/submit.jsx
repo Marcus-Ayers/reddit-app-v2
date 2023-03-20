@@ -4,6 +4,7 @@ import { safeCredentials, handleErrors } from '@utils/fetchHelper';
 import './submit.scss'
 
 const Submit = () => {
+  const [image, setImage] = useState(null);
   const [subreddits, setSubreddits] = useState([]);
   const [selectedSubreddit, setSelectedSubreddit] = useState("");
   const [userId, setUserId] = useState('')
@@ -50,6 +51,10 @@ const Submit = () => {
     event.preventDefault();
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    const formData = new FormData();
+
+		formData.append('File', image);
+
     if (!selectedSubreddit) {
       alert("Please choose a community before submitting.");
       return;
@@ -70,14 +75,20 @@ const Submit = () => {
     })
       .then(handleErrors)
       .then(data => {
+        const formData = new FormData();
         console.log(data);
         setTitle('');
         setBody('');
+
+        if (image !== null) {
+          formData.append('image', image);
+          formData.append('imageName', image.name);
+        }
         window.location.reload();
       })
       .catch(error => {
         console.log(error);
-        window.alert("You need to be logged in to create a post");
+        // window.alert("You need to be logged in to create a post");
       });
   };
 
@@ -133,7 +144,8 @@ const Submit = () => {
                   value={title} 
                   onChange={handleChange} 
                   rows='1' 
-                  required />
+                  required
+                   />
                   {selectedFormat === 'post' ? (
                     <textarea 
                     className="form-control textarea-border body text-white" 
@@ -150,7 +162,9 @@ const Submit = () => {
                         name="image"
                         className="form-control-file"
                         accept="image/*"
+                        onChange={handleSubmit}
                       />
+                      
                   )}
                 <div className="container buttons">
                   <button type="submit" className="btn btn-light ml-2 post-button"> Post </button>
