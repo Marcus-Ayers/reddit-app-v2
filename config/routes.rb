@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/user/:user_id' => 'static_pages#user'
   get '/login' => 'static_pages#login'
   delete '/sessions' => 'sessions#destroy'
+  get '/submit' => 'static_pages#submit'
 
   
   namespace :api do

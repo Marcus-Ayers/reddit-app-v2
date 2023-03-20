@@ -19,7 +19,7 @@ const Subreddit = (props) => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
+        console.error(error);
       });
     
     fetch(`/api/subreddits/${props.subreddit_id}/posts`)
@@ -30,7 +30,7 @@ const Subreddit = (props) => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
+        console.error(error);
       });
   }, []);
 
