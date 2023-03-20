@@ -139,12 +139,7 @@ const Home = (props) => {
                 </div>
               ))}
               <div className="dropdown sub-button-border">
-        <button
-          type="button" className="btn btn-light create-subreddit-button"
-          onClick={toggleDropdown}
-        >
-          Create Subreddit
-        </button>
+        <button type="button" className="btn btn-light create-subreddit-button" onClick={toggleDropdown}> Create Subreddit </button>
         {isOpen && (
           <div className="dropdown-menu">
             <form onSubmit={handleSubmit}>
