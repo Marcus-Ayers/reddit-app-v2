@@ -4,20 +4,38 @@ import { safeCredentials, handleErrors } from '@utils/fetchHelper';
 import './submit.scss'
 
 const Submit = () => {
-  const[userId, setUserId] = useState('')
+  const [subreddits, setSubreddits] = useState([]);
+  const [selectedSubreddit, setSelectedSubreddit] = useState("");
+  const [userId, setUserId] = useState('')
   const [authenticated, setAuthenticated] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [selectedFormat, setSelectedFormat] = useState("post");
+
+
   
   useEffect(() => {
     fetch('/api/authenticated')
       .then(handleErrors)
       .then(data => {
         setUserId(data.id)
-        console.log(data)
         setAuthenticated(data.authenticated);
+        setLoading(false);
+      });
+
+      fetch('/api/subreddits')
+      .then((response) => response.json())
+      .then((data) => {
+        setSubreddits(data.subreddits);
+        setLoading(false);
       });
   }, []);
+  
+  const handleSubredditChange = (event) => {
+    setSelectedSubreddit(event.target.value);
+  };
+
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -32,8 +50,12 @@ const Submit = () => {
     event.preventDefault();
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    if (!selectedSubreddit) {
+      alert("Please choose a community before submitting.");
+      return;
+    }
     // fetch(`/api/subreddits/${subredditId}/posts`, {
-      fetch(`/api/subreddits/3/posts`, {
+      fetch(`/api/subreddits/${selectedSubreddit}/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,8 +64,8 @@ const Submit = () => {
       body: JSON.stringify({
         title,
         body,
-        user_id: userId,
-        subreddit_id: 3,
+        // user_id: userId,
+        // subreddit_id: 3,
       }),
     })
       .then(handleErrors)
@@ -59,23 +81,77 @@ const Submit = () => {
       });
   };
 
+  const selectPostFormat = () => {
+    setSelectedFormat("post");
+  };
+  
+  const selectImageFormat = () => {
+    setSelectedFormat("image");
+  };
+  
+
+  if (loading) {
+    return <p>loading...</p>;
+  }
   if (authenticated) {
     return (
       <Layout>
         <div className="container">
-          <div className="row mt-5 post-container-buttons">
-            <div className="col-4 ml-auto left-button-background">
+          <div className="row">
+            <div className="col-8 mx-auto mt-5 mb-2 p-0 header">
+              <h4 className='mb-3' >Create a post</h4>
+            </div>
+          </div>
+          <div className="row mt-2">
+            <div className="col-2"></div>
+              <select className='dropdown' value={selectedSubreddit} onChange={handleSubredditChange}>
+                {!selectedSubreddit && <option value="">Choose a community</option>}
+                {subreddits?.map((subreddit) => (
+              <option key={subreddit?.id} value={subreddit?.id}>
+                {subreddit?.name}
+              </option>
+            ))}
+          </select>
+          </div>
+          <div className="row mt-2 post-container-buttons">
+            <div className={`col-4 ml-auto left-button-background ${selectedFormat === "post" ? "active-format" : "inactive-format"} onClick={selectPostFormat}`} onClick={selectPostFormat} >
                 <h3 className='d-flex left-button'>Post</h3>
             </div>
-            <div className="col-4 mr-auto right-button-background">
+            <div className={`col-4 mr-auto right-button-background ${selectedFormat === "image" ? "active-format" : "inactive-format"} onClick={selectImageFormat}`} onClick={selectImageFormat}>
               <h3 className='d-flex right-button'>Image</h3>
             </div>
           </div>
           <div className="row ">
             <div className="col-8 mx-auto post-container">
               <form onSubmit={handleSubmit}>
-                  <textarea className="form-control textarea-border text-white mb-3 mt-3" name='title' id='title' placeholder='Title' value={title} onChange={handleChange} rows='1'  />
-                  <textarea className="form-control textarea-border body text-white" id='body' name='body' placeholder='Text (optional)' value={body} onChange={handleChange} rows='5'  />
+
+                  <textarea 
+                  className="form-control textarea-border text-white mb-3 mt-3" 
+                  name='title' 
+                  id='title' 
+                  placeholder='Title' 
+                  value={title} 
+                  onChange={handleChange} 
+                  rows='1' 
+                  required />
+                  {selectedFormat === 'post' ? (
+                    <textarea 
+                    className="form-control textarea-border body text-white" 
+                    id='body' 
+                    name='body' 
+                    placeholder='Text (optional)' 
+                    value={body} 
+                    onChange={handleChange} 
+                    rows='7'  />
+                  ) : (
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        className="form-control-file"
+                        accept="image/*"
+                      />
+                  )}
                 <div className="container buttons">
                   <button type="submit" className="btn btn-light ml-2 post-button"> Post </button>
                   {/* <button type="button" className="btn btn-outline-secondary draft-button"> Save Draft </button> */}
