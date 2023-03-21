@@ -107,12 +107,38 @@ const Home = (props) => {
                   <h6 className='text-white' >There are no posts yet.</h6>
                 ) : (
               posts.map(post => {
+                async function upvotePost(subId, postId) {
+                  const response = await fetch(`/api/subreddits/${post.subreddit.id}/posts/${post.id}/upvote`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                    },
+                  });
+                  const data = await response.json();
+                  return data.votes_count;
+                }
+                
+                async function downvotePost(subId, postId) {
+                  const response = await fetch(`/api/subreddits/${post.subreddit.id}/posts/${post.id}/downvote`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                    },
+                  });
+                  const data = await response.json();
+                  return data.votes_count;
+                }
+                
                     const date = new Date(post.created_at)
                     const dateToString = date.toLocaleString();
-                    // console.log(post)
+                    console.log(post.votes_count)
               return (
                 <div key={post.id} className="col-6 col-lg-4 mb-3 post">
                   <div className="post-header">
+                  <button onClick={() => upvotePost(post.subreddit.id, post.id)}>Upvote</button>
+                  <button onClick={() => downvotePost(post.subreddit.id, post.id)}>Downvote</button>
 
                   <a href={`/subreddit/${post.subreddit?.id}`} className="text-body text-decoration-none">
                   <p className='subreddit-name'>r/{post.subreddit?.name} </p>

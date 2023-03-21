@@ -7,6 +7,7 @@ json.posts do
     json.user post.user
     json.comments post.comments
     json.subreddit post.subreddit
+    json.votes_count post.votes_count
 
     # json.subreddit do
     #   json.id post.subreddit.id
