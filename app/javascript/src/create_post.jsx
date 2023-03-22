@@ -61,7 +61,7 @@ const CreatePost = ({ userId, subredditId }) => {
   return (
     <div className="container">
       <div className="row">
-          <div className="col create-post-button mt-3 mb-3 d-flex align-items-center">
+          <div className="col create-post-link mt-3 mb-3 d-flex align-items-center">
             <img src="https://www.redditstatic.com/avatars/avatar_default_02_94E044.png" alt="Italian Trulli" className="profile-pic"></img>
             <input type="text" className="create-post mx-auto" onClick={navToSubmit} placeholder="Create Post" />
 

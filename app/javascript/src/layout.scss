@@ -1,3 +1,30 @@
+.home-image {
+  max-width: 15%;
+  margin-top: -15px;
+}
+
+.home-banner-image {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.home {
+  align-items: flex-end;
+  color: #e7e7e7;
+
+}
+
+.home-text {
+  color: #e7e7e7;
+}
+
+.sub-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 
 body  {
   background-color: rgb(0, 0, 0);
@@ -177,15 +204,33 @@ body  {
 
 .create-subreddit-button {
   border-radius: 20px;
-  width: 100%;
+  width: 90%;
   margin-top: 15px;
-  margin-bottom: 15px;
   border-top: 1px solid white;
 }
 
-.sub-button-border {
-  border-top: 1px solid white;
+.create-subreddit-button:hover {
+  background-color: #d5d5d5!important;
 }
+
+.create-post-button {
+  border-radius: 20px;
+  width: 90%;
+  border-color: #f8f9fa!important;
+  color: #f8f9fa!important;
+}
+
+.create-post-button:hover {
+  background-color: #ffffff0d!important;
+}
+
+.button-anchor {
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  text-decoration: none!important;
+}
+
 
 // --------------------------
 
@@ -332,7 +377,8 @@ textarea.form-control {
   border: 1px solid rgb(53, 53, 53);
   border-radius: 5px;
   max-height: 300px;
-  margin-top: 15px;
+  margin-top: 30px;
+  padding: 0px!important;
 }
 
 .info-box-image {
@@ -352,7 +398,7 @@ textarea.form-control {
 
 //CREATEPOST.JSX // CREATE POST BUTTON
 
-.create-post-button {
+.create-post-link {
   background-color: #1A1A1B;
   border-radius: 6px;
   height: 50px;
