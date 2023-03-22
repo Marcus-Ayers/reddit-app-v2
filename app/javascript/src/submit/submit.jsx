@@ -47,50 +47,44 @@ const Submit = () => {
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
+  
     const formData = new FormData();
-
-		formData.append('File', image);
-
+  
+    formData.append('post[title]', title);
+    formData.append('post[body]', body);
+  
+    if (image) {
+      formData.append('post[image]', image);
+    }
+  
     if (!selectedSubreddit) {
       alert("Please choose a community before submitting.");
       return;
     }
-    // fetch(`/api/subreddits/${subredditId}/posts`, {
-      fetch(`/api/subreddits/${selectedSubreddit}/posts`, {
+  
+    fetch(`/api/subreddits/${selectedSubreddit}/posts`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'X-CSRF-Token': csrfToken,
       },
-      body: JSON.stringify({
-        title,
-        body,
-        // user_id: userId,
-        // subreddit_id: 3,
-      }),
+      body: formData,
     })
       .then(handleErrors)
-      .then(data => {
-        const formData = new FormData();
+      .then((data) => {
         console.log(data);
         setTitle('');
         setBody('');
-
-        if (image !== null) {
-          formData.append('image', image);
-          formData.append('imageName', image.name);
-        }
+        setImage(null);
         window.location.reload();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-        // window.alert("You need to be logged in to create a post");
       });
   };
+  
 
   const selectPostFormat = () => {
     setSelectedFormat("post");
@@ -98,6 +92,10 @@ const Submit = () => {
   
   const selectImageFormat = () => {
     setSelectedFormat("image");
+  };
+
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
   };
   
 
@@ -162,7 +160,7 @@ const Submit = () => {
                         name="image"
                         className="form-control-file"
                         accept="image/*"
-                        onChange={handleSubmit}
+                        onChange={handleImageChange}
                       />
                       
                   )}
