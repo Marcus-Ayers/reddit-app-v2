@@ -29,6 +29,13 @@ module Api
       render 'api/subreddits/show', status: :ok
     end
 
+    def search
+      query = params[:query].downcase
+      subreddits = Subreddit.where('lower(name) LIKE ?', "%#{query}%").limit(5)
+      render json: { subreddits: subreddits }
+    end
+    
+
     private
 
     def subreddit_params

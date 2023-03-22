@@ -8,6 +8,85 @@ const Layout = (props) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [username, setUsername] = useState([]);
   const [show_login, setShowLogin] = useState(true);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const subredditSuggestions = [
+    { id: 1, name: 'r/Funny' },
+    { id: 2, name: 'r/Pics' },
+    { id: 3, name: 'r/Gaming' },
+  ];
+
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+
+    if (event.target.value.toLowerCase() == 'all') {
+      fetch(`/api/subreddits`)
+    .then(handleErrors)
+    .then((data) => {
+      console.log(data.subreddits)
+      setSearchResults(data.subreddits);
+    })
+    .catch((error) => {
+      console.error('Error fetching search results:', error);
+    });
+
+    } else if (event.target.value.length > 1) {
+      // Make an API call to fetch the search results and update the state
+      fetch(`/api/search/subreddits?query=${event.target.value}`)
+        .then(handleErrors)
+        .then((data) => {
+          console.log(data)
+          setSearchResults(data.subreddits);
+        })
+        .catch((error) => {
+          console.error('Error fetching search results:', error);
+        });
+    } else {
+      setSearchResults([]);
+    }
+    if (event.target.value.length > 0) {
+      setShowSuggestions(false);
+    } else {
+      setShowSuggestions(true);
+    }
+  };
+
+  const searchBox = (
+    <div className="search-container">
+      <input
+        type="text"
+        className="search-input"
+        placeholder="Search Reddit"
+        value={searchInput}
+        onChange={handleSearchInputChange}
+        onFocus={() => setShowSuggestions(true)}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+      />
+      {showSuggestions && (
+        <div className="search-results-dropdown">
+          <p className='suggested'>Suggested subreddits</p>
+          {subredditSuggestions.map((suggestion) => (
+            <div key={suggestion.id} className="search-result-item">
+              <a href={`/subreddit/${suggestion.id}`}>{suggestion.name}</a>
+            </div>
+          ))}
+          <p className='hint'> Hint: Type 'all' to see all subreddits</p>
+        </div>
+      )}
+      {searchResults.length > 0 && !showSuggestions && (
+        <div className="search-results-dropdown">
+          {searchResults.map((result) => (
+            <div key={result.id} className="search-result-item">
+              <a href={`/subreddit/${result.id}`}>{result.name}</a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   useEffect(() => {
     fetch('/api/authenticated')
@@ -77,6 +156,8 @@ const Layout = (props) => {
   
             {/* Navigation bar links */}
             <a className="navbar-brand text-danger" href="/">Reddit</a>
+            {searchBox}
+
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
