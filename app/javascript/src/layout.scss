@@ -61,7 +61,7 @@ body  {
 //HOME PAGE STYLES
 
 .post {
-  background-color: rgb(38, 0, 255);
+  // max-width: 100%!important;
   max-width: 100%!important;
   border-radius: 5px;
   border: 1px solid rgb(53, 53, 53);
@@ -247,6 +247,12 @@ textarea.form-control {
 
 .icon-name-container {
   display: flex;
+}
+
+.post-image {
+  max-height: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
 }
 
 // --------------------

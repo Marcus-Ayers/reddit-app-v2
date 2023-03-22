@@ -43,7 +43,6 @@ const Home = (props) => {
     })
       .then(handleErrors)
       .then(data => {
-        console.log(data);
         setIsOpen(false);
         setName('');
         setDescription('');
@@ -66,7 +65,6 @@ const Home = (props) => {
       //   }));
       // });
       .then((data) => {
-        console.log(data)
         setPosts(data.posts);
         setAuthenticated(data.authenticated);
         setLoading(false);
@@ -106,27 +104,28 @@ const Home = (props) => {
               {posts.length === 0 ? (
                   <h6 className='text-white' >There are no posts yet.</h6>
                 ) : (
-              posts.map(post => {
+                  posts.map(post => {
                     const date = new Date(post.created_at)
                     const dateToString = date.toLocaleString();
-                    // console.log(post)
-              return (
-                <div key={post.id} className="col-6 col-lg-4 mb-3 post">
-                  <div className="post-header">
-
-                  <a href={`/subreddit/${post.subreddit?.id}`} className="text-body text-decoration-none">
-                  <p className='subreddit-name'>r/{post.subreddit?.name} </p>
-                  </a>
-                  <a href={`/user/${post.user.id}`}>
-                  <p className='post-info user-name'>Posted by u/{post.user.username} - {dateToString}</p>
-                  </a>
-                  </div>
-                  <a href={`subreddit/${post.subreddit?.id}/post/${post.id}`}>
-                    <h6 className="mb-3 post-title">{post.title}</h6>
-                  </a>
-                </div>
-              )
-            })
+                    return (
+                      <div key={post.id} className="col-6 col-lg-4 mb-3 post">
+                        <div className="post-header">
+                  
+                          <a href={`/subreddit/${post.subreddit?.id}`} className="text-body text-decoration-none">
+                            <p className='subreddit-name'>r/{post.subreddit?.name} </p>
+                          </a>
+                          <a href={`/user/${post.user.id}`}>
+                            <p className='post-info user-name'>Posted by u/{post.user.username} - {dateToString}</p>
+                          </a>
+                        </div>
+                        <a href={`subreddit/${post.subreddit?.id}/post/${post.id}`}>
+                          <h6 className="mb-3 post-title">{post.title}</h6>
+                          {post.image && <img src={post.image} alt={post.title} className="post-image" />}
+                        </a>
+                      </div>
+                    )
+                  })
+                  
                 )}
                 
               </div>

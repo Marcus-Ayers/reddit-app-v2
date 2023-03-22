@@ -1,5 +1,19 @@
 module Api
   class PostsController < ApplicationController
+    # def create
+    #   @subreddit = Subreddit.find_by(id: params[:subreddit_id])
+    #   token = cookies.signed[:reddit_session_token]
+    #   session = Session.find_by(token: token)
+    #   user = session.user
+    #   @post = @subreddit.posts.new(post_params)
+    #   @post.user = user # assign the user to the post
+    #   if @post.save
+    #     render 'api/posts/show', status: :created
+    #   else
+    #     render json: { error: 'post_creation_failed', errors: @post.errors }, status: :unprocessable_entity
+    #   end
+    # end
+    
     def create
       @subreddit = Subreddit.find_by(id: params[:subreddit_id])
       token = cookies.signed[:reddit_session_token]

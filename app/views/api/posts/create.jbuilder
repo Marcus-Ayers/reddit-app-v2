@@ -6,7 +6,7 @@ json.post do
   json.subreddit_id @post.subreddit_id
   json.created_at @post.created_at
   json.updated_at @post.updated_at
-  json.image url_for(@post.imgae) if
+  json.image url_for(@post.image) if
   @post.image.attached?
 
   # json.comments @post.comments
