@@ -84,7 +84,7 @@ const Home = (props) => {
     <Layout>
       <div className="container background">
           <div className="row home-layout">
-            <div className="col-7 mr-5 content">
+            <div className="col-sm-12 col-md-12 col-lg-7  mr-5 content">
               <CreatePost />
               <div className="posts123">
               {posts.length === 0 ? (
@@ -113,7 +113,7 @@ const Home = (props) => {
                 )}
               </div>
             </div>
-            <div className="col-3 info">
+            <div className="col-7 col-sm-6 col-md-6 col-lg-3 info">
                 <img className='home-banner-image' src='https://www.redditstatic.com/desktop2x/img/id-cards/home-banner@2x.png'></img>
               <div className="home-container d-flex">
                 <img className='home-image pl-3' src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png'></img>

@@ -192,7 +192,7 @@ const Post = (props) => {
        <div className="container">
           <div className="row home-layout">
             {/* ------------SHOWS THE POST CONTENTS------------- */}
-            <div className=" col-7 mr-5 mb-3 post-background">
+            <div className="col-sm-12 col-md-7 mr-5 mb-3 post-background">
               <div className="">
               <div className="mb-3">
                 <div className="post-header">
@@ -215,16 +215,16 @@ const Post = (props) => {
               </div>
             </div>
             {/* ----------THE SUBREDDIT INFO BOX TO THE RIGHT------------ */}
-            <div className="col-3 info">
+            <div className="col-12 col-sm-6 col-md-3 info post-mobile">
               <div className="info-box-container">
               <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image ml-3 mt-3'></img>
-              <h2 className='name-infobox'>r/{name || "N/A"}</h2>
+              <h2 className='name-infobox name-infobox-mobile'>r/{name || "N/A"}</h2>
               </div>
               <p className='description-infobox ml-3'>{description || "N/A"}</p>
             </div>
           </div>
           {/* ------------COMMENTS SECTION-------------- */}
-            <div className="row">
+            <div className="row mobile">
               <div className="col-1 p-0"></div>
                 <div className="col-7 post-background comments-layout">
                   <div className="form-group form-bottom-border">

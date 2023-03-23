@@ -15,10 +15,6 @@ const Submit = () => {
   const [loading, setLoading] = useState(true);
   const [selectedFormat, setSelectedFormat] = useState("post");
 
-  const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-  };
-
   
   useEffect(() => {
     fetch('/api/authenticated')
@@ -35,11 +31,16 @@ const Submit = () => {
         setSubreddits(data.subreddits);
         setLoading(false);
       });
+
+      const storedSubreddit = localStorage.getItem('selectedSubreddit');
   }, []);
   
   const handleSubredditChange = (event) => {
-    setSelectedSubreddit(event.target.value);
+    const selected = event.target.value;
+    setSelectedSubreddit(selected);
+    localStorage.setItem('selectedSubreddit', selected);
   };
+  
 
 
   const handleChange = event => {
@@ -111,12 +112,12 @@ const Submit = () => {
       <Layout>
         <div className="container">
           <div className="row">
-            <div className="col-8 mx-auto mt-5 mb-2 p-0 header">
+            <div className="col-12 col-sm-8 mx-auto mt-5 mb-2 p-0 header ">
               <h4 className='mb-3' >Create a post</h4>
             </div>
           </div>
-          <div className="row mt-2">
-            <div className="col-2"></div>
+          <div className="row mt-2 ">
+            <div className="col-0 col-sm-2"></div>
               <select className='dropdown' value={selectedSubreddit} onChange={handleSubredditChange}>
                 {!selectedSubreddit && <option value="">Choose a community</option>}
                 {subreddits?.map((subreddit) => (
@@ -127,15 +128,15 @@ const Submit = () => {
           </select>
           </div>
           <div className="row mt-2 post-container-buttons">
-            <div className={`col-4 ml-auto left-button-background ${selectedFormat === "post" ? "active-format" : "inactive-format"} onClick={selectPostFormat}`} onClick={selectPostFormat} >
+            <div className={`col-6 col-md-4 ml-auto left-button-background ${selectedFormat === "post" ? "active-format" : "inactive-format"} onClick={selectPostFormat}`} onClick={selectPostFormat} >
                 <h3 className='d-flex left-button'>Post</h3>
             </div>
-            <div className={`col-4 mr-auto right-button-background ${selectedFormat === "image" ? "active-format" : "inactive-format"} onClick={selectImageFormat}`} onClick={selectImageFormat}>
+            <div className={`col-6 col-md-4 mr-auto right-button-background ${selectedFormat === "image" ? "active-format" : "inactive-format"} onClick={selectImageFormat}`} onClick={selectImageFormat}>
               <h3 className='d-flex right-button'>Image</h3>
             </div>
           </div>
           <div className="row ">
-            <div className="col-8 mx-auto post-container">
+            <div className="col-12 col-md-8 mx-auto post-container">
               <form onSubmit={handleSubmit}>
 
                   <textarea 
