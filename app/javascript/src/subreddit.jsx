@@ -46,7 +46,7 @@ const Subreddit = (props) => {
   return (
     <Layout>
       <div className="container background">
-          <div className="row">
+          <div className="row home-layout">
             <div className="col-7 mr-5 content">
               <Create_post subredditId={props.subreddit_id}/>
               <div className="posts123">
@@ -76,7 +76,7 @@ const Subreddit = (props) => {
                 )}
               </div>
             </div>
-            <div className="col-4 info">
+            <div className="col-3 info">
               <div className="info-box-container">
                 <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image ml-3 mt-3'></img>
                 <h3 className='name-infobox'>{name}</h3>

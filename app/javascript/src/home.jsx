@@ -92,13 +92,12 @@ const Home = (props) => {
       });
   }, []);
 
-  console.log(posts)
 
 
   return (
     <Layout>
       <div className="container background">
-          <div className="row">
+          <div className="row home-layout">
             <div className="col-7 mr-5 content">
               <CreatePost />
               <div className="posts123">
@@ -130,21 +129,13 @@ const Home = (props) => {
                 
               </div>
             </div>
-            <div className="col-4 info">
+            <div className="col-3 info">
                 <img className='home-banner-image' src='https://www.redditstatic.com/desktop2x/img/id-cards/home-banner@2x.png'></img>
               <div className="home-container d-flex">
                 <img className='home-image pl-3' src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png'></img>
                 <h5 className='pl-3 d-flex home'>Home</h5>
               </div>
               <p className='home-text pl-3'>Your personal Reddit frontpage. Come here to check in with your favorite communities.</p>
-              {/* <h1 className='subreddits-header text-danger'>Subreddits</h1>
-              {subreddits.map(subreddit => (
-                <div key={subreddit.id} className="sub-names">
-                  <a href={`/subreddit/${subreddit.id}`} className="subreddit-name">
-                    <p>r/{subreddit.name}</p>
-                  </a>
-                </div>
-              ))} */}
               <div className="sub-button-container">
         <button type="button" className="btn btn-light create-subreddit-button " onClick={toggleDropdown}> Create Subreddit </button>
         <a className='button-anchor' href='/submit'>

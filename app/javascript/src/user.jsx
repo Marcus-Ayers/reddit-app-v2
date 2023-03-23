@@ -59,17 +59,17 @@ const User = (props) => {
   <div className="container">
     <div className="col-12">
       <div className="row user-page">
-        <h1 className='user-page-info'>{username}</h1>
+        <h1 className='user-page-info'>u/{username}</h1>
         <div className="row user-page2">
           <p className='user-page-info'>{email}</p>
         </div>
         <div className="container">
           <div className="col-12">
             <div className="row user-posts user-posts-border">
-              <h1 className='user-page-info'>{username}'s posts</h1>
+              <h4 className='user-page-info my-3'>u/{username}'s posts</h4>
             </div>
             <div className="row user-posts">
-              {posts.map(post => {
+              {/* {posts.map(post => {
                 if (post.user.id == props.user_id) {
                   const date = new Date(post.created_at)
                   const dateToString = date.toLocaleString();
@@ -89,7 +89,31 @@ const User = (props) => {
                     </div>
                   );
                 }
-              })}
+              })} */}
+              {posts.length === 0 ? (
+                  <h6 className='text-white' >There are no posts in this subreddit yet.</h6>
+                ) : (
+                  posts.map(post => {
+                    const date = new Date(post.created_at)
+                    const dateToString = date.toLocaleString();
+                    return (
+                      <div key={post.id} className="col-6 col-lg-4 mb-3 post">
+                        <div className="post-header">
+                          <a href={`/subreddit/${post.subreddit?.id}`} className="text-body text-decoration-none">
+                            <p className='subreddit-name'>r/{post.subreddit?.name} </p>
+                          </a>
+                          <a href={`/user/${post.user.id}`}>
+                            <p className='post-info user-name'>Posted by u/{post.user.username} - {dateToString}</p>
+                          </a>
+                        </div>
+                        <a href={`${props.subreddit_id}/post/${post.id}`}>
+                          <h6 className="mb-3 post-title">{post.title}</h6>
+                          {post.image && <img src={post.image} alt={post.title} className="post-image pt-3" />}
+                        </a>                  
+                      </div>
+                    )
+                  })
+                )}
             </div>
           </div>
         </div>

@@ -40,7 +40,6 @@ const Post = (props) => {
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}`)
       .then(handleErrors)
       .then((data) => {
-        console.log(data)
         setImage(data.post.image)
         setPost(data.post);
         setLoading(false);
@@ -131,7 +130,6 @@ const Post = (props) => {
     })
       .then(handleErrors)
       .then(data => {
-        console.log(data)
         const newComment = {
           id: data.id,
           body: data.body,
@@ -192,7 +190,7 @@ const Post = (props) => {
   return (
     <Layout>
        <div className="container">
-          <div className="row">
+          <div className="row home-layout">
             {/* ------------SHOWS THE POST CONTENTS------------- */}
             <div className=" col-7 mr-5 mb-3 post-background">
               <div className="">
@@ -217,7 +215,7 @@ const Post = (props) => {
               </div>
             </div>
             {/* ----------THE SUBREDDIT INFO BOX TO THE RIGHT------------ */}
-            <div className="col-4 info">
+            <div className="col-3 info">
               <div className="info-box-container">
               <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image ml-3 mt-3'></img>
               <h2 className='name-infobox'>r/{name || "N/A"}</h2>
@@ -227,16 +225,23 @@ const Post = (props) => {
           </div>
           {/* ------------COMMENTS SECTION-------------- */}
             <div className="row">
-                <div className="col-7 post-background">
+              <div className="col-1 p-0"></div>
+                <div className="col-7 post-background comments-layout">
                   <div className="form-group form-bottom-border">
                     <form onSubmit={handleSubmit}>
-                      <label className='comment-header' htmlFor="title">Comment as 
-                        <span className="username-color ml-1">
-                          <a href={`/user/${id}`}>
-                            {username}
-                          </a>
-                        </span>
-                      </label>
+                    <label className='comment-header ml-1' htmlFor="title">
+                      {authenticated ? (
+                        <>Comment as 
+                          <span className="username-color ml-1">
+                            <a href={`/user/${id}`}>
+                              {username}
+                            </a>
+                          </span>
+                        </>
+                      ) : (
+                        "Log in to comment"
+                      )}
+                    </label>
                       <div className="comment-box">
                         <textarea type='text' className='form-control text-white no-border' id='title' name='body' placeholder='What are your thoughts?' rows='5' value={body} onChange={handleChange} />
                         <div className="comment-tools">
