@@ -77,8 +77,7 @@ const Subreddit = (props) => {
   const description = subreddit?.description;
   const name = subreddit?.name;
 
-  // console.log(subreddit.user.username)
-  console.log(username)
+  
   return (
     <Layout>
       <div className="container background">

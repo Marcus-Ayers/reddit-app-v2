@@ -47,10 +47,6 @@ const CreatePost = ({ userId, subredditId }) => {
       });
   };
 
-  // const navToSubmit = () => {
-  //   window.location.href='/submit'
-  // };
-
   const navToSubmit = () => {
     const queryParams = subredditId ? `?subredditId=${subredditId}` : '';
     window.location.href = `/submit${queryParams}`;

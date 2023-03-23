@@ -151,7 +151,6 @@ const Layout = (props) => {
   return (
     <React.Fragment>
       <nav className="navbar navbar-expand navbar-light home-background">
-          
           <div className="container-fluid">
             {/* Reddit logo and title */}
             <a href='/'>
