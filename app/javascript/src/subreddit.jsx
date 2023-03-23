@@ -5,6 +5,7 @@ import { handleErrors, safeCredentials } from '@utils/fetchHelper';
 import Create_post from './create_post';
 
 const Subreddit = (props) => {
+  const [username, setUsername] = useState('')
   const [posts, setPosts] = useState([]);
   const [image, setImage] = useState(null)
   const [subreddit, setSubreddit] = useState([]);
@@ -23,7 +24,6 @@ const Subreddit = (props) => {
       return response.json();
   })
   .then(data => {
-    console.log(data)
       if (data.success) {
         window.location.href = '/';
       }
@@ -38,6 +38,15 @@ const Subreddit = (props) => {
   };
 
   useEffect(() => {
+    fetch('/api/authenticated')
+      .then(handleErrors)
+      .then((data) => {
+        setUsername(data.username);
+      })
+      .catch((error) => {
+        console.error("XYXYXYXYXYXYXYXYXYYXYXYXYXYY " + error);
+      });
+
     fetch(`/api/subreddits/${props.subreddit_id}`)
       .then(handleErrors)
       .then((data) => {
@@ -68,7 +77,8 @@ const Subreddit = (props) => {
   const description = subreddit?.description;
   const name = subreddit?.name;
 
-  
+  // console.log(subreddit.user.username)
+  console.log(username)
   return (
     <Layout>
       <div className="container background">
@@ -108,7 +118,11 @@ const Subreddit = (props) => {
                 <h3 className='name-infobox'>{name}</h3>
               </div>
               <p className='description-infobox ml-3'>{description}</p>
-              <button type="button" className="btn btn-danger delete-post-button " onClick={removeSubreddit} >delete</button>
+              <div className="delete-sub-container d-flex">
+                {username === subreddit?.user?.username &&
+              <button type="button" className="btn btn-danger mb-2 mr-2 delete-post-button " onClick={removeSubreddit} >Delete Subreddit</button>
+                }
+              </div>
             </div>
           </div>
         </div>

@@ -204,7 +204,7 @@ const Post = (props) => {
                     </a>
                 </div>
               {username === postUser &&
-              <a href={'/subreddit/1'} >
+              <a href={'/'} >
                   <button type="button" className="btn btn-danger delete-post-button " onClick={removePost} >delete</button>
               </a>
                 }
