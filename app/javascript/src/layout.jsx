@@ -27,7 +27,6 @@ const Layout = (props) => {
       fetch(`/api/subreddits`)
     .then(handleErrors)
     .then((data) => {
-      console.log(data.subreddits)
       setSearchResults(data.subreddits);
     })
     .catch((error) => {
@@ -39,7 +38,6 @@ const Layout = (props) => {
       fetch(`/api/search/subreddits?query=${event.target.value}`)
         .then(handleErrors)
         .then((data) => {
-          console.log(data)
           setSearchResults(data.subreddits);
         })
         .catch((error) => {
@@ -93,7 +91,6 @@ const Layout = (props) => {
     fetch('/api/authenticated')
       .then(handleErrors)
       .then(data => {
-        console.log(data.id);
         setId(data.id)
         setUsername(data.username);
         setAuthenticated(data.authenticated);

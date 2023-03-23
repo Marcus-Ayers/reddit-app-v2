@@ -34,6 +34,29 @@ module Api
       subreddits = Subreddit.where('lower(name) LIKE ?', "%#{query}%").limit(5)
       render json: { subreddits: subreddits }
     end
+
+    def destroy
+      token = cookies.signed[:reddit_session_token]
+      session = Session.find_by(token: token)
+    
+      return render json: { success: false } unless session
+    
+      user = session.user
+      subreddit = Subreddit.find_by(id: params[:id])
+      
+    puts subreddit
+      if subreddit && subreddit.user && (subreddit.user == user) && subreddit.destroy
+        render json: {
+          success: true,
+        }
+      else
+        render json: {
+          success: false,
+        }
+      end
+      
+    end
+    
     
 
     private

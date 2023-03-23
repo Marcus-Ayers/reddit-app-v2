@@ -57,13 +57,6 @@ const Home = (props) => {
   useEffect(() => {
     fetch(`/api/posts/all`)
       .then(handleErrors)
-      // .then(data => {
-      //   setState(prevState => ({
-      //     ...prevState,
-      //     posts: data.posts,
-      //     loading: false,
-      //   }));
-      // });
       .then((data) => {
         setPosts(data.posts);
         setAuthenticated(data.authenticated);
@@ -75,13 +68,6 @@ const Home = (props) => {
 
     fetch(`/api/subreddits`)
       .then(handleErrors)
-      // .then(data => {
-      //   setState(prevState => ({
-      //     ...prevState,
-      //     subreddits: data.subreddits,
-      //     loading: false,
-      //   }));
-      // });
       .then((data) => {
         setSubreddits(data.subreddits);
         setAuthenticated(data.authenticated);
@@ -124,9 +110,7 @@ const Home = (props) => {
                       </div>
                     )
                   })
-                  
                 )}
-                
               </div>
             </div>
             <div className="col-3 info">

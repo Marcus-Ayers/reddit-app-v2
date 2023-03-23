@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   namespace :api do
     get 'search/subreddits', to: 'subreddits#search'
     delete '/subreddits/:sub_id/posts/:post_id' => 'posts#destroy'
+    delete '/subreddits/:id' => 'subreddits#destroy'
+
     resources :users, except: [:destroy] do
       resources :subscriptions, only: [:index]
     end

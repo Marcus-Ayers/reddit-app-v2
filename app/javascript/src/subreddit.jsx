@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
-import { handleErrors } from '@utils/fetchHelper';
+import { handleErrors, safeCredentials } from '@utils/fetchHelper';
 import Create_post from './create_post';
 
 const Subreddit = (props) => {
@@ -10,6 +10,32 @@ const Subreddit = (props) => {
   const [subreddit, setSubreddit] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
+
+
+  const removeSubreddit = (e) => {
+    fetch(`/api/subreddits/${props.subreddit_id}`, safeCredentials({
+      method: 'DELETE',
+  }))
+  .then(response => {
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response.json();
+  })
+  .then(data => {
+    console.log(data)
+      if (data.success) {
+        window.location.href = '/';
+      }
+  })
+  .catch(error => {
+    
+      console.error(error);
+      setState({
+          error: 'Sorry, there was a problem deleting the post. Please try again later.'
+      });
+  });
+  };
 
   useEffect(() => {
     fetch(`/api/subreddits/${props.subreddit_id}`)
@@ -82,6 +108,7 @@ const Subreddit = (props) => {
                 <h3 className='name-infobox'>{name}</h3>
               </div>
               <p className='description-infobox ml-3'>{description}</p>
+              <button type="button" className="btn btn-danger delete-post-button " onClick={removeSubreddit} >delete</button>
             </div>
           </div>
         </div>

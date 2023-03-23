@@ -3,6 +3,7 @@ json.subreddit do
   json.name @subreddit.name
   json.description @subreddit.description
   json.posts @subreddit.posts
+  json.user @subreddit.user
 
   # json.user do
   #   json.id @subreddit.user.id
