@@ -166,9 +166,9 @@ const Layout = (props) => {
                     logoutButton
                     ) : (
                       // Render the login and signup buttons if the user is not authenticated
-                      <a href={`/login`}>
-                      <button type="button" className="btn btn-outline-primary mr-4 login-btn">Log In</button>
-                      <button type="button" className="btn btn-primary signup-btn">Sign up</button>
+                      <a className='signup-btn-a' href={`/login`}>
+                      {/* <button type="button" className="btn btn-outline-primary mr-4 login-btn">Log In</button> */}
+                      <button type="button" className="btn btn-primary signup-btn mr-4">Log In</button>
                     </a>
                   )}
                 </li>

@@ -7,4 +7,10 @@ json.post do
   json.comments @post.comments
   json.created_at @post.created_at
   json.image @post.image
+
+  if @post.image.attached?
+    json.image url_for(@post.image)
+  else
+    json.image nil
+  end
 end

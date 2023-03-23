@@ -6,6 +6,7 @@ import Create_post from './create_post';
 
 const Subreddit = (props) => {
   const [posts, setPosts] = useState([]);
+  const [image, setImage] = useState(null)
   const [subreddit, setSubreddit] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
@@ -67,6 +68,7 @@ const Subreddit = (props) => {
                         </div>
                         <a href={`${props.subreddit_id}/post/${post.id}`}>
                           <h6 className="mb-3 post-title">{post.title}</h6>
+                          {post.image && <img src={post.image} alt={post.title} className="post-image pt-3" />}
                         </a>                  
                       </div>
                     )
@@ -76,11 +78,10 @@ const Subreddit = (props) => {
             </div>
             <div className="col-4 info">
               <div className="info-box-container">
-                <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png'
-                     className='info-box-image'></img>
+                <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image ml-3 mt-3'></img>
                 <h3 className='name-infobox'>{name}</h3>
               </div>
-              <p className='description-infobox'>{description}</p>
+              <p className='description-infobox ml-3'>{description}</p>
             </div>
           </div>
         </div>

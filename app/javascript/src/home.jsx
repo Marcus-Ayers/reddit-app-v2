@@ -92,7 +92,8 @@ const Home = (props) => {
       });
   }, []);
 
-  // const { posts, subreddits, isOpen, name, description } = state;
+  console.log(posts)
+
 
   return (
     <Layout>
@@ -110,7 +111,6 @@ const Home = (props) => {
                     return (
                       <div key={post.id} className="col-6 col-lg-4 mb-3 post">
                         <div className="post-header">
-                  
                           <a href={`/subreddit/${post.subreddit?.id}`} className="text-body text-decoration-none">
                             <p className='subreddit-name'>r/{post.subreddit?.name} </p>
                           </a>
@@ -118,9 +118,9 @@ const Home = (props) => {
                             <p className='post-info user-name'>Posted by u/{post.user.username} - {dateToString}</p>
                           </a>
                         </div>
-                        <a href={`subreddit/${post.subreddit?.id}/post/${post.id}`}>
-                          <h6 className="mb-3 post-title">{post.title}</h6>
-                          {post.image && <img src={post.image} alt={post.title} className="post-image" />}
+                        <a className='text-decoration-none' href={`subreddit/${post.subreddit?.id}/post/${post.id}`}>
+                          <h6 className="mb-2 post-title">{post.title}</h6>
+                          {post.image && <img src={post.image} alt={post.title} className="post-image pt-3" />}
                         </a>
                       </div>
                     )

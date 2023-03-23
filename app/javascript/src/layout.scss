@@ -25,6 +25,14 @@
   justify-content: center;
 }
 
+.text-decoration-none {
+  text-decoration: none!important;
+}
+
+.post-title {
+  text-decoration: none!important;
+}
+
 
 body  {
   background-color: rgb(0, 0, 0);
@@ -114,14 +122,6 @@ body  {
 
 //LOGIN AND SIGNUP BUTTONS
 
-.login-btn {
-  border-radius: 30px;
-  width: 100px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  max-height: 30px;
-}
 
 .signup-btn {
   border-radius: 30px;
@@ -130,6 +130,20 @@ body  {
   align-items: center;
   justify-content: center;
   max-height: 30px;
+  background-color: #d5d5d5!important;
+  border-color: #d5d5d5!important;
+  color: #393939!important;
+  text-decoration: none!important;
+}
+
+.signup-btn:hover {
+  background-color: #aaaaaa!important;
+  border-color: #aaaaaa!important;
+
+}
+
+.signup-btn-a {
+  text-decoration: none!important;
 }
 
 // ---------------------------------
@@ -248,7 +262,7 @@ body  {
 
 .post-background {
   background-color: #1A1A1B;
-  margin-top: 15px;
+  margin-top: 30px;
   border: 1px solid rgb(53,53,53);
   border-radius: 5px;
 }

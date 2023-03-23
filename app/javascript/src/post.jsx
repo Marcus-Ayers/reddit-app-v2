@@ -6,14 +6,15 @@ import { handleErrors, safeCredentials } from '@utils/fetchHelper';
 const Post = (props) => {
   const [body, setBody] = useState('');
   const [post, setPost] = useState(null);
+  const [image, setImage] = useState(null);
   const [subreddit, setSubreddit] = useState(null);
   const [comment, setComment] = useState([]);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
+  const [id, setId] = useState('')
   const [authenticated, setAuthenticated] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [openDropdownId, setOpenDropdownId] = useState(null);
-
 
 
   // ------------FETCH REQUESTS AND SETTING THE STATE------------
@@ -21,6 +22,7 @@ const Post = (props) => {
     fetch('/api/authenticated')
       .then(handleErrors)
       .then((data) => {
+        setId(data.id)
         setUsername(data.username);
         setAuthenticated(data.authenticated);
       })
@@ -38,6 +40,8 @@ const Post = (props) => {
     fetch(`/api/subreddits/${props.subreddit_id}/posts/${props.post_id}`)
       .then(handleErrors)
       .then((data) => {
+        console.log(data)
+        setImage(data.post.image)
         setPost(data.post);
         setLoading(false);
       });
@@ -193,15 +197,21 @@ const Post = (props) => {
             <div className=" col-7 mr-5 mb-3 post-background">
               <div className="">
               <div className="mb-3">
-              <a href={`/user/${post?.user?.id}`}>
-              <p className='post-info ml-0'>Posted by u/{post?.user?.username} - {dateToString}</p>
-              </a>
+                <div className="post-header">
+                   <a href={`/subreddit/${post?.subreddit?.id}`} className="text-body text-decoration-none">
+                     <p className='subreddit-name'>r/{subreddit?.name} </p>
+                   </a>
+                    <a href={`/user/${post?.user?.id}`}>
+                      <p className='post-info user-name'>Posted by u/{post?.user?.username} - {dateToString}</p>
+                    </a>
+                </div>
               {username === postUser &&
               <a href={'/subreddit/1'} >
                   <button type="button" className="btn btn-danger delete-post-button " onClick={removePost} >delete</button>
               </a>
                 }
                 <h3 className="mb-0 post-title-big">{title}</h3>
+                {image && <img src={image} alt={title} className="post-image pt-3" />}
                 <p className="mb-0 post-description"><small><b>{post?.body}</b></small></p>
               </div>
               </div>
@@ -209,10 +219,10 @@ const Post = (props) => {
             {/* ----------THE SUBREDDIT INFO BOX TO THE RIGHT------------ */}
             <div className="col-4 info">
               <div className="info-box-container">
-              <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image'></img>
-              <h2 className='name-infobox'>{name || "N/A"}</h2>
+              <img src='https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png' className='info-box-image ml-3 mt-3'></img>
+              <h2 className='name-infobox'>r/{name || "N/A"}</h2>
               </div>
-              <p className='description-infobox'>{description || "N/A"}</p>
+              <p className='description-infobox ml-3'>{description || "N/A"}</p>
             </div>
           </div>
           {/* ------------COMMENTS SECTION-------------- */}
@@ -222,8 +232,8 @@ const Post = (props) => {
                     <form onSubmit={handleSubmit}>
                       <label className='comment-header' htmlFor="title">Comment as 
                         <span className="username-color ml-1">
-                          <a href={`/user/${post?.user?.id}`}>
-                            {post?.user?.username}
+                          <a href={`/user/${id}`}>
+                            {username}
                           </a>
                         </span>
                       </label>
@@ -242,13 +252,9 @@ const Post = (props) => {
                       <div key={comment?.id || index} className="">
                         <div className="container">
                           <div className="row comment-container">
-                            {/* <div className="p-0">
-                              <img src="https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png" className="comment-image"></img>
-                            </div> */}
                             <div className="col p-0">
                               <div className="icon-name-container">
                             <img src="https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png" className="comment-image"></img>
-
                               <a className='d-flex align-items-center' href={`/user/${post?.user?.id}`}>
                                 <p className="comment-username">u/{comment?.user?.username}</p>
                               </a>
