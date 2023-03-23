@@ -186,8 +186,11 @@ const Layout = (props) => {
         {props.children}
         {/* Footer */}
         <footer className="p-3 home-background footer">
-          <div>
+          <div className='d-flex footer-links' >
             <p className="me-3 mb-0 text-secondary">Reddit Clone</p>
+            <a href='https://github.com/Marcus-Ayers/reddit-app-v2.git' target='_blank'>
+            <p className='github text-secondary' >GitHub</p>
+            </a>
           </div>
         </footer>
                   </div>

@@ -467,9 +467,17 @@ textarea.form-control {
 
 //LAYOUT.JSX // THE HEADER & FOOTER
 
+.footer-links {
+  justify-content: space-between;
+}
+
 .reddit-name {
   width: 70px;
   // height: 30px;
+}
+
+.github {
+  color: #f1f1fe;
 }
 
 .home-background, .post {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Layout from '@src/layout';
 import { safeCredentials, handleErrors } from '@utils/fetchHelper';
 import './submit.scss'
@@ -14,6 +15,9 @@ const Submit = () => {
   const [loading, setLoading] = useState(true);
   const [selectedFormat, setSelectedFormat] = useState("post");
 
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  };
 
   
   useEffect(() => {

@@ -5,14 +5,7 @@ const CreatePost = ({ userId, subredditId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const toggleDropdown = () => {
-    setIsOpen(prevIsOpen => !prevIsOpen);
-    if (!isOpen) {
-      setTimeout(() => {
-        document.getElementById('title').focus();
-      }, 0);
-    }
-  };
+
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -54,8 +47,13 @@ const CreatePost = ({ userId, subredditId }) => {
       });
   };
 
+  // const navToSubmit = () => {
+  //   window.location.href='/submit'
+  // };
+
   const navToSubmit = () => {
-    window.location.href='/submit'
+    const queryParams = subredditId ? `?subredditId=${subredditId}` : '';
+    window.location.href = `/submit${queryParams}`;
   };
   
   return (
