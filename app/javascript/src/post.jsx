@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { handleErrors, safeCredentials } from '@utils/fetchHelper';
+import { getTimeAgo } from './timeUtils'
 
 const Post = (props) => {
   const [body, setBody] = useState('');
@@ -185,6 +186,7 @@ const Post = (props) => {
   const title = post?.title;
   const date = new Date(post?.created_at);
   const dateToString = date?.toLocaleString();
+  const timeAgo = getTimeAgo(post?.created_at);
   const postUser = post?.user ? post.user.username : "";
 
   return (
@@ -200,7 +202,7 @@ const Post = (props) => {
                      <p className='subreddit-name'>r/{subreddit?.name} </p>
                    </a>
                     <a href={`/user/${post?.user?.id}`}>
-                      <p className='post-info user-name'>Posted by u/{post?.user?.username} - {dateToString}</p>
+                      <p className='post-info user-name'>Posted by u/{post?.user?.username} - {dateToString} - {timeAgo}</p>
                     </a>
                 </div>
               {username === postUser &&
@@ -226,7 +228,7 @@ const Post = (props) => {
           {/* ------------COMMENTS SECTION-------------- */}
             <div className="row mobile">
               <div className="col-1 p-0"></div>
-                <div className="col-7 post-background comments-layout">
+                <div className="col-12 col-sm-7 post-background comments-layout">
                   <div className="form-group form-bottom-border">
                     <form onSubmit={handleSubmit}>
                     <label className='comment-header ml-1' htmlFor="title">

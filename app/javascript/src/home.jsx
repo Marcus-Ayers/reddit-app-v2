@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import { handleErrors } from '@utils/fetchHelper';
 import CreatePost from './create_post';
+import { getTimeAgo } from './timeUtils';
 
 const Home = (props) => {
   const [posts, setPosts] = useState([]);
@@ -91,8 +92,7 @@ const Home = (props) => {
                   <h6 className='text-white' >There are no posts yet.</h6>
                 ) : (
                   posts.map(post => {
-                    const date = new Date(post.created_at)
-                    const dateToString = date.toLocaleString();
+                    const timeAgo = getTimeAgo(post.created_at);
                     return (
                       <div key={post.id} className="col-6 col-lg-4 mb-3 post">
                         <div className="post-header">
@@ -100,7 +100,7 @@ const Home = (props) => {
                             <p className='subreddit-name'>r/{post.subreddit?.name} </p>
                           </a>
                           <a href={`/user/${post.user.id}`}>
-                            <p className='post-info user-name'>Posted by u/{post.user.username} - {dateToString}</p>
+                            <p className='post-info user-name'>Posted by u/{post.user.username} - {timeAgo}</p>
                           </a>
                         </div>
                         <a className='text-decoration-none' href={`subreddit/${post.subreddit?.id}/post/${post.id}`}>
