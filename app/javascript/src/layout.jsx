@@ -167,7 +167,7 @@ const Layout = (props) => {
               <div className="search-container search-mobile">
                 <input
                   type="text"
-                  className="search-input"
+                  className="search-input pl-3"
                   placeholder="Search Reddit"
                   value={searchInput}
                   onChange={handleSearchInputChange}

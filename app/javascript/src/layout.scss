@@ -52,6 +52,18 @@
     margin-right: 0px!important;
     display: none;
   }
+  .search-input {
+    width: 85%!important;
+    padding-left: 10px!important;
+  }
+  .search-container {
+    // margin-left: 0px!important;
+    width: 60%;
+  }
+  .logo {
+    height: 20px!important;
+    width: 20px!important;
+  }
 }
 
 
@@ -130,7 +142,7 @@ body  {
   background-color: #343536;
   border: 1px solid rgb(53, 53, 53);
   border-radius: 10px;
-  padding-left: 20px!important;
+  // padding-left: 20px!important;
   color: #f1f1fe;
 }
 
