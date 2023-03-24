@@ -91,9 +91,10 @@ const User = (props) => {
                 }
               })} */}
               {posts.length === 0 ? (
-                  <h6 className='text-white' >There are no posts in this subreddit yet.</h6>
+                  <h6 className='text-white' >This user has made no posts yet.</h6>
                 ) : (
                   posts.map(post => {
+                    if (post.user.id == props.user_id) {
                     const date = new Date(post.created_at)
                     const dateToString = date.toLocaleString();
                     return (
@@ -112,6 +113,7 @@ const User = (props) => {
                         </a>                  
                       </div>
                     )
+                    }
                   })
                 )}
             </div>

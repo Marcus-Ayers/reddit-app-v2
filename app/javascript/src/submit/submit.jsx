@@ -83,7 +83,7 @@ const Submit = () => {
         setTitle('');
         setBody('');
         setImage(null);
-        window.location.reload();
+        window.location.href='/'
       })
       .catch((error) => {
         console.log(error);

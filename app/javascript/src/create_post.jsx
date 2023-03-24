@@ -35,7 +35,6 @@ const CreatePost = ({ userId, subredditId }) => {
     })
       .then(handleErrors)
       .then(data => {
-        console.log(data);
         setIsOpen(false);
         setTitle('');
         setBody('');
